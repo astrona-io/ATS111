@@ -1,0 +1,14 @@
+# Extra files the Perses server must see under /etc/perses/extra.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: perses
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: perses-extra
+  namespace: perses
+data:
+  README.txt: |
+    Files mounted from the ConfigMap perses-extra.

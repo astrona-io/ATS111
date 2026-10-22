@@ -1,0 +1,60 @@
+# Give Two Teams Their Own Dashboards
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod, the Perses Operator 0.5.0 and a Perses server, and creates the namespaces payments and catalog"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-020-01-setup"
+      description: "Checks that the team namespaces are empty; nothing else is created"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-projects"
+      description: "Confirms Perses has the projects payments and catalog"
+      type: "file"
+      source: "validation/validate-projects.sh"
+    - name: "validate-team-resources"
+      description: "Confirms each team's dashboard and datasource are Available and in Perses"
+      type: "file"
+      source: "validation/validate-team-resources.sh"
+    - name: "validate-datasource-queries"
+      description: "Confirms a query through each team's datasource returns data"
+      type: "file"
+      source: "validation/validate-datasource-queries.sh"
+    - name: "validate-selectors"
+      description: "Confirms every resource selects the Perses server by label"
+      type: "file"
+      source: "validation/validate-selectors.sh"
+
+teardown:
+  keepCluster: false

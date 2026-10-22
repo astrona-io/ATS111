@@ -1,0 +1,56 @@
+# Keep Each Team In Its Own Namespace
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-040-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod, the Perses Operator 0.5.0 and a Perses server, and creates the team namespaces with the ServiceAccounts payments-ci and catalog-ci"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-040-01-setup"
+      description: "Checks the ServiceAccounts exist and have no permissions on Perses resources yet"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-permission-matrix"
+      description: "Confirms each team can edit Perses resources in its own namespace only"
+      type: "file"
+      source: "validation/validate-permission-matrix.sh"
+    - name: "validate-no-cluster-wide-binding"
+      description: "Confirms no ClusterRoleBinding names a team ServiceAccount"
+      type: "file"
+      source: "validation/validate-no-cluster-wide-binding.sh"
+    - name: "validate-team-dashboards"
+      description: "Confirms each team's dashboard and datasource are Available and in Perses"
+      type: "file"
+      source: "validation/validate-team-dashboards.sh"
+
+teardown:
+  keepCluster: false

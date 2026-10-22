@@ -1,0 +1,56 @@
+# Deliver Dashboards From Git With Flux
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Flux, the Perses Operator 0.5.0, a Perses server, Gitea with gitops/fleet and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-030-01-setup"
+      description: "Checks the repository holds the team folders; no Flux objects are created"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-flux-sync"
+      description: "Confirms the GitRepository and both team Flux Kustomizations are Ready and prune"
+      type: "file"
+      source: "validation/validate-flux-sync.sh"
+    - name: "validate-dashboards-from-git"
+      description: "Confirms Flux applied each team's resources and Perses serves them"
+      type: "file"
+      source: "validation/validate-dashboards-from-git.sh"
+    - name: "validate-git-change-reaches-perses"
+      description: "Confirms a change pushed to Git reaches the Perses API"
+      type: "file"
+      source: "validation/validate-git-change-reaches-perses.sh"
+
+teardown:
+  keepCluster: false

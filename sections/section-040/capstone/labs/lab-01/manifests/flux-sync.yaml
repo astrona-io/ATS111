@@ -1,0 +1,57 @@
+# Starting state of the capstone: one Flux Kustomization per team, in the
+# team's namespace, both reading the GitRepository fleet in flux-system.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dashboards
+  namespace: payments
+spec:
+  interval: 5m
+  serviceAccountName: payments-ci
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+    namespace: flux-system
+  path: ./dashboards/payments
+  prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dashboards
+  namespace: catalog
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+    namespace: flux-system
+  path: ./dashboards/catalog
+  prune: true
+---
+# Added in a hurry so the catalog pipeline "just works".
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: catalog-ci-admin
+subjects:
+  - kind: ServiceAccount
+    name: catalog-ci
+    namespace: catalog
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin

@@ -1,0 +1,41 @@
+apiVersion: perses.dev/v1alpha2
+kind: PersesDashboard
+metadata:
+  name: payments-latency
+  namespace: payments
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Payments Latency
+    duration: 1h
+    panels:
+      up:
+        kind: Panel
+        spec:
+          display:
+            name: Targets Up
+          plugin:
+            kind: TimeSeriesChart
+            spec: {}
+          queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: rate(prometheus_http_request_duration_seconds_sum[5m])
+    layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Health
+          items:
+            - x: 0
+              y: 0
+              width: 12
+              height: 6
+              content:
+                $ref: "#/spec/panels/latency"

@@ -1,0 +1,335 @@
+# Course manifest for ATS111 - Kubernetes-Native Operations & The Perses Operator (Perses).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS111
+  title: "Perses: Kubernetes-Native Operations & The Perses Operator"
+  maturity: draft
+  description: >
+    Training material covering the Kubernetes-Native Operations & The Perses
+    Operator domain of the Perses training path: installing the Perses
+    Operator, running a Perses server from a Perses resource and reading its
+    status, declaring dashboards and datasources as custom resources in
+    application namespaces, delivering them from Git with Flux, and keeping
+    teams apart with namespaces, Kubernetes RBAC and Flux impersonation.
+    Each module pairs a layered reader with an ungraded hands-on playground
+    and a graded practice lab. Each section closes with an integration
+    capstone. Written for the Perses Operator v0.5.0 and Perses v0.54.0.
+
+  certification:
+    name: Perses
+    code: PERSES
+    provider: Astrona
+    domain: Kubernetes-Native Operations & The Perses Operator
+    weight: 15
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Running Perses With The Perses Operator"
+    description: >
+      What the Perses Operator is and how it reconciles, installing it with
+      Helm, the Perses resource that describes one Perses server, and reading
+      the status conditions and logs that say why a server does not run.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Run Perses With The Perses Operator"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "What The Perses Operator Does"
+        path: sections/section-010/module-01/course-01-what-the-operator-does.md
+      - type: reading
+        title: "The Perses Resource"
+        path: sections/section-010/module-01/course-02-the-perses-resource.md
+      - type: reading
+        title: "Status Conditions And Troubleshooting"
+        path: sections/section-010/module-01/course-03-status-and-troubleshooting.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Fix A Perses Server That Never Serves Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: operator
+        task_kind: troubleshooting
+        tags: [perses-operator, perses-cr, status-conditions, operator-logs, reconciliation]
+        learning_goals:
+          - Read why a Perses resource is degraded from its status conditions and the operator log
+          - Fix the image and the volume definition without deleting the Perses resource
+          - Prove the server runs with a ready Deployment and an answer from the Perses API
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses Operator API reference"
+            url: https://perses.dev/perses-operator/docs/api/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Make The Operator Reach Its Perses Server Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: operator
+        task_kind: troubleshooting
+        tags: [perses-operator, perses-cr, status-conditions, reconciliation, perses-dashboard, operator-logs]
+        learning_goals:
+          - Find why dashboards report PersesConnectionFailed while the Perses resource says Available
+          - Fix the Service name and the memory limit of a Perses server in place
+          - Prove the result with a stable Perses pod and a dashboard the Perses API serves
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses Operator API reference"
+            url: https://perses.dev/perses-operator/docs/api/
+
+  - id: module-020
+    title: "Dashboards And Datasources As Kubernetes Resources"
+    description: >
+      PersesDatasource and PersesGlobalDatasource, PersesDashboard, how a
+      namespace becomes a Perses project, how instanceSelector picks the
+      servers, what happens on update and delete, and file provisioning as
+      the way to load resources without the operator.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Declare Dashboards And Datasources In Namespaces"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Datasources As Custom Resources"
+        path: sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+      - type: reading
+        title: "Dashboards As Custom Resources"
+        path: sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Give Two Teams Their Own Dashboards Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: custom-resources
+        task_kind: build
+        tags: [perses-dashboard, perses-datasource, namespace-project, instance-selector, crd]
+        learning_goals:
+          - Declare a datasource and a dashboard as custom resources in two team namespaces
+          - Explain how each namespace becomes a Perses project
+          - Prove the result with the Perses API and a query through each team's datasource
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Dashboard API"
+            url: https://perses.dev/perses/docs/api/dashboard/
+          - name: "Datasource API"
+            url: https://perses.dev/perses/docs/api/datasource/
+      - type: reading
+        title: "Provisioning Without The Operator"
+        path: sections/section-020/module-01/course-03-provisioning-without-the-operator.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Fix Dashboards That Never Reach Perses Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: custom-resources
+        task_kind: troubleshooting
+        tags: [instance-selector, server-validation, perses-dashboard, perses-datasource, status-conditions, perses-cr]
+        learning_goals:
+          - Read PersesMissing and ValidationFailed from the conditions of dashboards and datasources
+          - Fix the label the selectors need, an invalid dashboard and a wrong datasource URL
+          - Prove that both teams' dashboards and datasources work in Perses
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Dashboard API"
+            url: https://perses.dev/perses/docs/api/dashboard/
+
+  - id: module-030
+    title: "GitOps For Dashboards With Flux"
+    description: >
+      Dashboards and datasources as YAML files in Git, one Flux Kustomization
+      per team, what happens when someone edits a dashboard by hand, and how
+      pruning removes a dashboard deleted from Git.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Reconcile Dashboards From Git"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "Dashboards In Git, Applied By Flux"
+        path: sections/section-030/module-01/course-01-dashboards-in-git.md
+      - type: reading
+        title: "Drift, Pruning And The Operator"
+        path: sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Deliver Dashboards From Git With Flux Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: gitops
+        task_kind: build
+        tags: [flux, gitrepository, kustomization, prune, perses-dashboard, gitea]
+        learning_goals:
+          - Connect Flux to the dashboards repository with one Kustomization per team
+          - Turn on pruning so a dashboard deleted from Git leaves Perses too
+          - Prove that a change pushed to Git reaches the Perses API
+        resources:
+          - name: "Flux Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "Flux GitRepository API"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Dashboard Delivery Pipeline Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: gitops
+        task_kind: troubleshooting
+        tags: [kustomization, prune, server-validation, drift, flux, perses-dashboard]
+        learning_goals:
+          - Find a wrong path, pruning switched off and a dashboard the Perses server refuses
+          - Fix the pipeline through Git and the Flux objects, not through the Perses API
+          - Prove that Git, the cluster and Perses hold the same dashboards
+        resources:
+          - name: "Flux Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+
+  - id: module-040
+    title: "Multi-Tenant Isolation"
+    description: >
+      One namespace per team, Kubernetes RBAC on the Perses custom resources,
+      checking permissions with kubectl auth can-i and impersonation, Flux
+      Kustomizations that act as the team's ServiceAccount, and where Perses'
+      own authorization fits.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Isolate Teams That Share One Perses Server"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Kubernetes RBAC For Perses Resources"
+        path: sections/section-040/module-01/course-01-rbac-for-perses-resources.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Keep Each Team In Its Own Namespace Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [rbac, role, role-binding, service-account, can-i, impersonation]
+        learning_goals:
+          - Give each team's ServiceAccount edit rights on Perses resources in its own namespace only
+          - Check the permissions with kubectl auth can-i and an impersonated apply
+          - Prove that a team can deliver its own dashboard and cannot touch another team's
+        resources:
+          - name: "Kubernetes RBAC authorization"
+            url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+      - type: reading
+        title: "Tenant Pipelines And Perses Authorization"
+        path: sections/section-040/module-01/course-02-tenant-pipelines-and-perses-authorization.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Lock Down Two Tenants Delivered By Flux Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: multi-tenancy
+        task_kind: troubleshooting
+        tags: [impersonation, service-account, role-binding, kustomization, rbac, can-i]
+        learning_goals:
+          - Make each team's Flux Kustomization act as the team's ServiceAccount
+          - Replace a cluster-admin binding with namespace-scoped permissions
+          - Prove that each team's dashboards reach Perses and a cross-namespace dashboard is refused
+        resources:
+          - name: "Flux multi-tenancy lockdown"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+          - name: "Flux Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "Kubernetes RBAC authorization"
+            url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/

@@ -1,0 +1,60 @@
+# Fix A Perses Server That Never Serves
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-010-01-setup"
+      description: "Applies the ConfigMap perses-extra and a Perses resource with a wrong image tag and a volume mount without a volume"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-perses-status"
+      description: "Confirms the Perses resource is Available and not Degraded"
+      type: "file"
+      source: "validation/validate-perses-status.sh"
+    - name: "validate-server-ready"
+      description: "Confirms the Perses server runs v0.54.0 and answers on its API"
+      type: "file"
+      source: "validation/validate-server-ready.sh"
+    - name: "validate-volume-kept"
+      description: "Confirms the extra volume is mounted from the ConfigMap perses-extra"
+      type: "file"
+      source: "validation/validate-volume-kept.sh"
+    - name: "validate-same-object"
+      description: "Confirms the Perses resource was fixed in place, not deleted and created again"
+      type: "file"
+      source: "validation/validate-same-object.sh"
+
+teardown:
+  keepCluster: false

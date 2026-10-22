@@ -1,0 +1,48 @@
+# Reference end state: edit rights on Perses resources, per team namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: perses-editor
+  namespace: payments
+rules:
+  - apiGroups: ["perses.dev"]
+    resources: ["persesdashboards", "persesdatasources"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: payments-ci-perses-editor
+  namespace: payments
+subjects:
+  - kind: ServiceAccount
+    name: payments-ci
+    namespace: payments
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: perses-editor
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: perses-editor
+  namespace: catalog
+rules:
+  - apiGroups: ["perses.dev"]
+    resources: ["persesdashboards", "persesdatasources"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: catalog-ci-perses-editor
+  namespace: catalog
+subjects:
+  - kind: ServiceAccount
+    name: catalog-ci
+    namespace: catalog
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: perses-editor

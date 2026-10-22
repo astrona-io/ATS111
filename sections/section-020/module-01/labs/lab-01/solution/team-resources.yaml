@@ -1,0 +1,126 @@
+# Reference end state of the lab: a datasource and a dashboard per team.
+apiVersion: perses.dev/v1alpha2
+kind: PersesDatasource
+metadata:
+  name: prometheus
+  namespace: payments
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Prometheus
+    default: true
+    plugin:
+      kind: PrometheusDatasource
+      spec:
+        proxy:
+          kind: HTTPProxy
+          spec:
+            url: http://prometheus.observability.svc.cluster.local:9090
+---
+apiVersion: perses.dev/v1alpha2
+kind: PersesDashboard
+metadata:
+  name: payments-overview
+  namespace: payments
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Payments Overview
+    duration: 1h
+    panels:
+      up:
+        kind: Panel
+        spec:
+          display:
+            name: Targets Up
+          plugin:
+            kind: TimeSeriesChart
+            spec: {}
+          queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: up
+    layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Health
+          items:
+            - x: 0
+              y: 0
+              width: 12
+              height: 6
+              content:
+                $ref: "#/spec/panels/up"
+---
+apiVersion: perses.dev/v1alpha2
+kind: PersesDatasource
+metadata:
+  name: prometheus
+  namespace: catalog
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Prometheus
+    default: true
+    plugin:
+      kind: PrometheusDatasource
+      spec:
+        proxy:
+          kind: HTTPProxy
+          spec:
+            url: http://prometheus.observability.svc.cluster.local:9090
+---
+apiVersion: perses.dev/v1alpha2
+kind: PersesDashboard
+metadata:
+  name: catalog-overview
+  namespace: catalog
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Catalog Overview
+    duration: 1h
+    panels:
+      up:
+        kind: Panel
+        spec:
+          display:
+            name: Targets Up
+          plugin:
+            kind: TimeSeriesChart
+            spec: {}
+          queries:
+            - kind: TimeSeriesQuery
+              spec:
+                plugin:
+                  kind: PrometheusTimeSeriesQuery
+                  spec:
+                    query: up
+    layouts:
+      - kind: Grid
+        spec:
+          display:
+            title: Health
+          items:
+            - x: 0
+              y: 0
+              width: 12
+              height: 6
+              content:
+                $ref: "#/spec/panels/up"

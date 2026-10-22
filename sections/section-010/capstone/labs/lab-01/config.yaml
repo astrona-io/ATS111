@@ -1,0 +1,60 @@
+# Make The Operator Reach Its Perses Server
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0, and creates the namespace payments"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-capstone-010-setup"
+      description: "Applies a Perses resource with a renamed Service and a 16Mi memory limit, and a datasource and dashboard in payments"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-service-name"
+      description: "Confirms the Perses server is reachable through the Service perses"
+      type: "file"
+      source: "validation/validate-service-name.sh"
+    - name: "validate-server-stable"
+      description: "Confirms the Perses server has enough memory and stays ready"
+      type: "file"
+      source: "validation/validate-server-stable.sh"
+    - name: "validate-dashboard-synced"
+      description: "Confirms the payments dashboard and datasource are Available and in Perses"
+      type: "file"
+      source: "validation/validate-dashboard-synced.sh"
+    - name: "validate-same-object"
+      description: "Confirms the Perses resource was fixed in place, not deleted and created again"
+      type: "file"
+      source: "validation/validate-same-object.sh"
+
+teardown:
+  keepCluster: false

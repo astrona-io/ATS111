@@ -1,0 +1,60 @@
+# Repair A Dashboard Delivery Pipeline
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Flux, the Perses Operator 0.5.0, a Perses server, Gitea with gitops/fleet and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-capstone-030-setup"
+      description: "Creates the Flux objects with a wrong catalog path and pruning off, leaves an orphaned dashboard, and commits a dashboard the Perses server refuses"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-flux-objects"
+      description: "Confirms both team Flux Kustomizations are Ready, on the right paths, and prune"
+      type: "file"
+      source: "validation/validate-flux-objects.sh"
+    - name: "validate-legacy-removed"
+      description: "Confirms the retired dashboard is gone from the cluster and from Perses"
+      type: "file"
+      source: "validation/validate-legacy-removed.sh"
+    - name: "validate-latency-fixed"
+      description: "Confirms the latency dashboard is fixed in Git and served by Perses"
+      type: "file"
+      source: "validation/validate-latency-fixed.sh"
+    - name: "validate-git-matches-perses"
+      description: "Confirms Perses holds exactly the dashboards Git holds"
+      type: "file"
+      source: "validation/validate-git-matches-perses.sh"
+
+teardown:
+  keepCluster: false

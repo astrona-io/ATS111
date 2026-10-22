@@ -1,0 +1,33 @@
+# Starting state of the capstone: the selector label is only under spec.metadata.labels.
+# The operator names the Deployment and the Service after this object, so the
+# server answers at http://perses.perses:8080 inside the cluster.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: perses
+---
+apiVersion: perses.dev/v1alpha2
+kind: Perses
+metadata:
+  name: perses
+  namespace: perses
+  labels:
+    team: platform
+spec:
+  image: docker.io/persesdev/perses:v0.54.0
+  containerPort: 8080
+  config:
+    database:
+      file:
+        folder: /perses
+        extension: yaml
+  storage:
+    emptyDir: {}
+  metadata:
+    labels:
+      app.kubernetes.io/instance: perses
+  resources:
+    requests:
+      memory: 128Mi
+    limits:
+      memory: 512Mi

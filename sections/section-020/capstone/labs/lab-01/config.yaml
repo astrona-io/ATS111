@@ -1,0 +1,60 @@
+# Fix Dashboards That Never Reach Perses
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0, and creates the namespaces payments and catalog"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-capstone-020-setup"
+      description: "Applies a Perses resource without the selector label on the object, and team resources with an invalid panel reference and a wrong datasource URL"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-perses-label"
+      description: "Confirms the Perses resource carries the label the selectors use, on the same object"
+      type: "file"
+      source: "validation/validate-perses-label.sh"
+    - name: "validate-team-resources"
+      description: "Confirms every team dashboard and datasource is Available and in Perses"
+      type: "file"
+      source: "validation/validate-team-resources.sh"
+    - name: "validate-datasource-queries"
+      description: "Confirms a query through each team's datasource returns data"
+      type: "file"
+      source: "validation/validate-datasource-queries.sh"
+    - name: "validate-selectors"
+      description: "Confirms every resource still selects the Perses server by label"
+      type: "file"
+      source: "validation/validate-selectors.sh"
+
+teardown:
+  keepCluster: false
