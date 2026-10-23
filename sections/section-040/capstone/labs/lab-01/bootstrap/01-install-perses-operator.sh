@@ -178,7 +178,7 @@ seed_file() {
   local content sha
   content="$(base64 < "$1" | tr -d '\n')"
   sha="$(gitea_api GET "/repos/$GIT_USER/$REPO/contents/$2?ref=main" 2>/dev/null \
-    | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p' | head -1)"
+    | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p' | head -1 || true)"
   if [ -n "$sha" ]; then
     gitea_api PUT "/repos/$GIT_USER/$REPO/contents/$2" \
       "{\"content\":\"$content\",\"sha\":\"$sha\",\"message\":\"Update $2\",\"branch\":\"main\"}" >/dev/null
