@@ -173,10 +173,19 @@ gitea_api() {
 
 seed_file() {
   # seed_file LOCAL_FILE REPO_PATH: commits one file to gitops/fleet on main.
-  local content
+  # A file that exists already (auto_init writes README.md) is replaced with
+  # PUT and its current sha; POST answers 422 for it.
+  local content sha
   content="$(base64 < "$1" | tr -d '\n')"
-  gitea_api POST "/repos/$GIT_USER/$REPO/contents/$2" \
-    "{\"content\":\"$content\",\"message\":\"Add $2\",\"branch\":\"main\"}" >/dev/null
+  sha="$(gitea_api GET "/repos/$GIT_USER/$REPO/contents/$2?ref=main" 2>/dev/null \
+    | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p' | head -1)"
+  if [ -n "$sha" ]; then
+    gitea_api PUT "/repos/$GIT_USER/$REPO/contents/$2" \
+      "{\"content\":\"$content\",\"sha\":\"$sha\",\"message\":\"Update $2\",\"branch\":\"main\"}" >/dev/null
+  else
+    gitea_api POST "/repos/$GIT_USER/$REPO/contents/$2" \
+      "{\"content\":\"$content\",\"message\":\"Add $2\",\"branch\":\"main\"}" >/dev/null
+  fi
 }
 
 echo "[lab] Creating the Gitea user ${GIT_USER} and the repository ${GIT_USER}/${REPO}..."
