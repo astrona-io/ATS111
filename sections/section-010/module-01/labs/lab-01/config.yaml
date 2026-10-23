@@ -57,7 +57,6 @@ teardown:
 runtime:
   kind:
     preloadImages:
-      - docker.io/persesdev/perses:0.54.0
       - docker.io/persesdev/perses:v0.54.0
       - nicolaka/netshoot:v0.13
       - prom/prometheus:v3.15.1
