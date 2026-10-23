@@ -201,6 +201,12 @@ for _ in $(seq 1 30); do
   sleep 2
 done
 [ "$gitea_user_ready" = true ] || { echo "ERROR: could not create the Gitea user $GIT_USER." >&2; exit 1; }
+# The admin command works through the pod; the API needs Gitea's HTTP port,
+# which can still refuse connections right after the rollout.
+for _ in $(seq 1 60); do
+  kubectl -n gitea exec deploy/tester -- curl -fsS http://gitea-http.gitea:3000/api/healthz >/dev/null 2>&1 && break
+  sleep 2
+done
 gitea_api GET "/repos/$GIT_USER/$REPO" >/dev/null 2>&1 || \
   gitea_api POST "/user/repos" "{\"name\":\"$REPO\",\"auto_init\":true,\"default_branch\":\"main\",\"private\":true}" >/dev/null
 
