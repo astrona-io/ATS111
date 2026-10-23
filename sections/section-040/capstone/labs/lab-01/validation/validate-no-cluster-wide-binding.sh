@@ -8,11 +8,11 @@ export PATH="$BIN_DIR:$PATH"
 
 perses_get() {
   # perses_get PATH: GET on the Perses API from the tester pod; prints the body.
-  kubectl -n observability exec deploy/tester -- curl -fsS "http://perses.perses:8080$1"
+  kubectl -n observability exec deploy/tester -- curl -fsS --retry 15 --retry-delay 2 --retry-connrefused "http://perses.perses:8080$1"
 }
 perses_jq() {
   # perses_jq PATH FILTER: GET on the Perses API, filtered with jq in the tester pod.
-  kubectl -n observability exec deploy/tester -- sh -c "curl -fsS 'http://perses.perses:8080$1' | jq -r '$2'"
+  kubectl -n observability exec deploy/tester -- sh -c "curl -fsS --retry 15 --retry-delay 2 --retry-connrefused 'http://perses.perses:8080$1' | jq -r '$2'"
 }
 condition_status() {
   # condition_status NAMESPACE KIND NAME TYPE: prints the status of one condition.

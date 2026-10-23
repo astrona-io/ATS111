@@ -17,7 +17,7 @@ for _ in $(seq 1 90); do
 done
 kubectl -n perses rollout status deployment/perses --timeout=300s
 for _ in $(seq 1 60); do
-  kubectl -n observability exec deploy/tester -- curl -fsS http://perses.perses:8080/api/v1/projects >/dev/null 2>&1 && break
+  kubectl -n observability exec deploy/tester -- curl -fsS --retry 15 --retry-delay 2 --retry-connrefused http://perses.perses:8080/api/v1/projects >/dev/null 2>&1 && break
   sleep 3
 done
 kubectl -n gitea rollout status deployment/gitea --timeout=300s
