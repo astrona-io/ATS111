@@ -29,8 +29,6 @@ training:
     name: Perses
     code: PERSES
     provider: Astrona
-    domain: Kubernetes-Native Operations & The Perses Operator
-    weight: 15
 
 modules:
 
