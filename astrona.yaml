@@ -122,6 +122,10 @@ modules:
             url: https://perses.dev/perses-operator/docs/user-guide/
           - name: "Perses Operator API reference"
             url: https://perses.dev/perses-operator/docs/api/
+      - type: quiz
+        title: "Knowledge Check: Running Perses With The Perses Operator"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
     title: "Dashboards And Datasources As Kubernetes Resources"
@@ -194,6 +198,10 @@ modules:
             url: https://perses.dev/perses-operator/docs/user-guide/
           - name: "Dashboard API"
             url: https://perses.dev/perses/docs/api/dashboard/
+      - type: quiz
+        title: "Knowledge Check: Dashboards And Datasources As Kubernetes Resources"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "GitOps For Dashboards With Flux"
@@ -262,6 +270,10 @@ modules:
             url: https://fluxcd.io/flux/components/kustomize/kustomizations/
           - name: "Perses Operator user guide"
             url: https://perses.dev/perses-operator/docs/user-guide/
+      - type: quiz
+        title: "Knowledge Check: GitOps For Dashboards With Flux"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "Multi-Tenant Isolation"
@@ -331,3 +343,11 @@ modules:
             url: https://fluxcd.io/flux/components/kustomize/kustomizations/
           - name: "Kubernetes RBAC authorization"
             url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+      - type: quiz
+        title: "Knowledge Check: Multi-Tenant Isolation"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

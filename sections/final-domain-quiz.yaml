@@ -1,0 +1,292 @@
+# Final domain knowledge check across all four sections.
+schema_version: 1
+kind: question_bank
+id: ats111-final
+course_id: ATS111
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: kubernetes-native-operations
+  title: "Kubernetes-Native Operations & The Perses Operator"
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+  - id: ats111-final-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the custom resources of the operator"
+    source_readings:
+      - sections/section-010/module-01/course-01-what-the-operator-does.md
+    prompt: "Which of these kinds is cluster-scoped?"
+    options:
+      - id: a
+        text: "`PersesDashboard`"
+        explanation: "Not correct. A `PersesDashboard` is namespaced."
+      - id: b
+        text: "`PersesGlobalDatasource`"
+        explanation: "Correct. It has no namespace and becomes a global datasource in Perses."
+      - id: c
+        text: "`PersesDatasource`"
+        explanation: "Not correct. A `PersesDatasource` is namespaced."
+      - id: d
+        text: "`Perses`"
+        explanation: "Not correct. A `Perses` resource is namespaced."
+    correct_option: b
+    explanation: "Correct. It has no namespace and becomes a global datasource in Perses."
+
+  - id: ats111-final-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the certManager.enable setting"
+    source_readings:
+      - sections/section-010/module-01/course-01-what-the-operator-does.md
+    prompt: "The playground installs the chart with `certManager.enable=false`. What is the effect?"
+    options:
+      - id: a
+        text: "The operator stops using TLS for the Perses API."
+        explanation: "Not correct. The setting concerns the operator's webhook certificate."
+      - id: b
+        text: "The CRDs are removed when the chart is uninstalled."
+        explanation: "Not correct. The chart keeps the CRDs because `crd.keep` is true."
+      - id: c
+        text: "The chart makes a self-signed webhook certificate, and only `v1alpha2` objects can be used."
+        explanation: "Correct. The conversion webhooks between versions are off."
+      - id: d
+        text: "Dashboards need no `instanceSelector`."
+        explanation: "Not correct. The setting has no effect on selectors."
+    correct_option: c
+    explanation: "Correct. The conversion webhooks between versions are off."
+
+  - id: ats111-final-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find the operator log"
+    source_readings:
+      - sections/section-010/module-01/course-03-status-and-troubleshooting.md
+    prompt: "In which container of `perses-operator-controller-manager` do you find the reconciliation log?"
+    options:
+      - id: a
+        text: "`kube-rbac-proxy`"
+        explanation: "Not correct. That container protects the metrics endpoint."
+      - id: b
+        text: "`perses`"
+        explanation: "Not correct. That is the name of the server, not a container of the operator."
+      - id: c
+        text: "`manager`"
+        explanation: "Correct. The container `manager` runs the reconciliation."
+      - id: d
+        text: "`webhook`"
+        explanation: "Not correct. The operator pod has no container named `webhook`."
+    correct_option: c
+    explanation: "Correct. The container `manager` runs the reconciliation."
+
+  - id: ats111-final-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right URL for an HTTP proxy datasource"
+    source_readings:
+      - sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+    prompt: "A datasource uses an HTTP proxy to Prometheus. Which URL is right?"
+    options:
+      - id: a
+        text: "The cluster address, for example `http://prometheus.observability.svc.cluster.local:9090`."
+        explanation: "Correct. The Perses server sends the query, so the address must work inside the cluster."
+      - id: b
+        text: "An address that only works from your browser, such as `http://localhost:9090`."
+        explanation: "Not correct. The browser does not call Prometheus with a proxy."
+      - id: c
+        text: "The address of the Perses Service."
+        explanation: "Not correct. That would send the query back to Perses."
+      - id: d
+        text: "The address of the Perses Operator."
+        explanation: "Not correct. The operator does not answer Prometheus queries."
+    correct_option: a
+    explanation: "Correct. The Perses server sends the query, so the address must work inside the cluster."
+
+  - id: ats111-final-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what happens to edits made in Perses"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "You change a dashboard title in the Perses user interface. What happens at the next reconciliation of the object?"
+    options:
+      - id: a
+        text: "The operator copies the change back into the object."
+        explanation: "Not correct. The operator only writes from the object to Perses."
+      - id: b
+        text: "The object is marked `Degraded`."
+        explanation: "Not correct. The operator reports no error for an edit made in Perses."
+      - id: c
+        text: "The change stays forever."
+        explanation: "Not correct. The next reconciliation replaces it."
+      - id: d
+        text: "The operator overwrites the change with the content of the object."
+        explanation: "Correct. The object is the source of truth."
+    correct_option: d
+    explanation: "Correct. The object is the source of truth."
+
+  - id: ats111-final-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the ValidationFailed reason"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "A dashboard layout refers to a panel that does not exist. Which reason does the object show?"
+    options:
+      - id: a
+        text: "`PersesMissing`"
+        explanation: "Not correct. A server was found, so the reason is not about selection."
+      - id: b
+        text: "`Reconciled`"
+        explanation: "Not correct. That reason belongs to a successful sync."
+      - id: c
+        text: "`ValidationFailed`, with the message of the Perses server."
+        explanation: "Correct. The operator sent the dashboard and the server refused it."
+      - id: d
+        text: "`InvalidConfiguration`"
+        explanation: "Not correct. That reason belongs to a `Perses` resource, not a dashboard."
+    correct_option: c
+    explanation: "Correct. The operator sent the dashboard and the server refused it."
+
+  - id: ats111-final-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Lay out a dashboards repository"
+    source_readings:
+      - sections/section-030/module-01/course-01-dashboards-in-git.md
+    prompt: "What does the folder of one team in the repository hold?"
+    options:
+      - id: a
+        text: "The team's `PersesDatasource` and `PersesDashboard` files, and no `Namespace` objects."
+        explanation: "Correct. The platform creates the namespaces."
+      - id: b
+        text: "The team's `Namespace` and `Perses` objects."
+        explanation: "Not correct. Namespaces and the server stay with the platform."
+      - id: c
+        text: "A Flux `Kustomization` for every other team."
+        explanation: "Not correct. A team folder holds only what the team owns."
+      - id: d
+        text: "The Perses database files of the team."
+        explanation: "Not correct. Perses stores its own data, not Git."
+    correct_option: a
+    explanation: "Correct. The platform creates the namespaces."
+
+  - id: ats111-final-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict who corrects an edit made in Perses"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "Someone edits a dashboard title in the Perses user interface. Why does Flux not fix it?"
+    options:
+      - id: a
+        text: "Flux does not support dashboards."
+        explanation: "Not correct. Flux applies any Kubernetes object."
+      - id: b
+        text: "Flux only checks Perses once a day."
+        explanation: "Not correct. Flux never checks Perses."
+      - id: c
+        text: "The object in the cluster still matches Git, so Flux sees no difference."
+        explanation: "Correct. Only a reconciliation of the object by the operator writes the object back."
+      - id: d
+        text: "The edit is saved in Git automatically."
+        explanation: "Not correct. Perses never writes to Git."
+    correct_option: c
+    explanation: "Correct. Only a reconciliation of the object by the operator writes the object back."
+
+  - id: ats111-final-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know the effect of prune false"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "A file is removed from Git while `prune: false`. Later you set `prune: true`. What happens to the dashboard?"
+    options:
+      - id: a
+        text: "Flux deletes it on the next run."
+        explanation: "Not correct. The inventory no longer lists it."
+      - id: b
+        text: "It stays in the cluster and in Perses until someone deletes it by hand."
+        explanation: "Correct. It dropped out of the inventory without being deleted."
+      - id: c
+        text: "The operator deletes it from Perses."
+        explanation: "Not correct. The object still exists, so the operator keeps the dashboard."
+      - id: d
+        text: "Flux marks the `Kustomization` as failed."
+        explanation: "Not correct. Flux reports no error for an orphan."
+    correct_option: b
+    explanation: "Correct. It dropped out of the inventory without being deleted."
+
+  - id: ats111-final-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write a Role for Perses objects"
+    source_readings:
+      - sections/section-040/module-01/course-01-rbac-for-perses-resources.md
+    prompt: "Which rule gives a team the right to deliver dashboards?"
+    options:
+      - id: a
+        text: "The same verbs with `apiGroups: [\"\"]`."
+        explanation: "Not correct. The core group does not hold Perses kinds, so the rule grants nothing."
+      - id: b
+        text: "Verbs on `persesdashboards` and `persesdatasources` with `apiGroups: [\"perses.dev\"]`, in a Role in the team namespace."
+        explanation: "Correct. The API group must match."
+      - id: c
+        text: "A ClusterRole bound with a ClusterRoleBinding."
+        explanation: "Not correct. That gives the same rights in every namespace."
+      - id: d
+        text: "The verb `*` on `perses`."
+        explanation: "Not correct. That would also allow changing the server for everyone."
+    correct_option: b
+    explanation: "Correct. The API group must match."
+
+  - id: ats111-final-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make a pipeline act as a team"
+    source_readings:
+      - sections/section-040/module-01/course-02-tenant-pipelines-and-perses-authorization.md
+    prompt: "Which field makes a Flux `Kustomization` apply as a ServiceAccount?"
+    options:
+      - id: a
+        text: "`spec.serviceAccountName`"
+        explanation: "Correct. Kustomize-controller impersonates it for every apply and prune."
+      - id: b
+        text: "`spec.sourceRef`"
+        explanation: "Not correct. It names the source, not the identity."
+      - id: c
+        text: "`spec.targetNamespace`"
+        explanation: "Not correct. It sets a namespace, not an identity."
+      - id: d
+        text: "`spec.prune`"
+        explanation: "Not correct. It controls deletion."
+    correct_option: a
+    explanation: "Correct. Kustomize-controller impersonates it for every apply and prune."
+
+  - id: ats111-final-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the lockdown flags"
+    source_readings:
+      - sections/section-040/module-01/course-02-tenant-pipelines-and-perses-authorization.md
+    prompt: "Which flag makes a `Kustomization` without `serviceAccountName` impersonate a default account?"
+    options:
+      - id: a
+        text: "`--no-cross-namespace-refs=true`"
+        explanation: "Not correct. It stops references to sources in other namespaces."
+      - id: b
+        text: "`--no-remote-bases=true`"
+        explanation: "Not correct. It stops remote Kustomize bases."
+      - id: c
+        text: "`--default-service-account=<name>`"
+        explanation: "Correct. It is set on kustomize-controller and helm-controller."
+      - id: d
+        text: "`--watch-all-namespaces=false`"
+        explanation: "Not correct. It is not a lockdown flag for impersonation."
+    correct_option: c
+    explanation: "Correct. It is set on kustomize-controller and helm-controller."
+

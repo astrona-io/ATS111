@@ -1,0 +1,246 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats111-010
+course_id: ATS111
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Running Perses With The Perses Operator"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats111-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what an operator is"
+    source_readings:
+      - sections/section-010/module-01/course-01-what-the-operator-does.md
+    prompt: "What does the Perses Operator do when you apply a `Perses` resource?"
+    options:
+      - id: a
+        text: "It watches the resource through the API server and creates or updates objects until the cluster matches it."
+        explanation: "Correct. A controller reconciles continuously and reacts to every change."
+      - id: b
+        text: "It waits for you to run a sync command, then copies the resource into a Deployment."
+        explanation: "Not correct. The operator reacts to every change and never waits for a command."
+      - id: c
+        text: "It runs the Perses server inside the operator pod."
+        explanation: "Not correct. The server runs in its own workload in the namespace of the resource."
+      - id: d
+        text: "It converts the resource into a Helm release."
+        explanation: "Not correct. Helm installed the operator, but the operator does not create Helm releases."
+    correct_option: a
+    explanation: "Correct. A controller reconciles continuously and reacts to every change."
+
+  - id: ats111-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the custom resources of the operator"
+    source_readings:
+      - sections/section-010/module-01/course-01-what-the-operator-does.md
+    prompt: "Which of these kinds is cluster-scoped?"
+    options:
+      - id: a
+        text: "`PersesDashboard`"
+        explanation: "Not correct. A `PersesDashboard` is namespaced."
+      - id: b
+        text: "`PersesGlobalDatasource`"
+        explanation: "Correct. It has no namespace and becomes a global datasource in Perses."
+      - id: c
+        text: "`PersesDatasource`"
+        explanation: "Not correct. A `PersesDatasource` is namespaced."
+      - id: d
+        text: "`Perses`"
+        explanation: "Not correct. A `Perses` resource is namespaced."
+    correct_option: b
+    explanation: "Correct. It has no namespace and becomes a global datasource in Perses."
+
+  - id: ats111-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Say which workload the operator creates"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-perses-resource.md
+    prompt: "A `Perses` resource uses a file database with `storage.emptyDir`. Which workload does the operator create?"
+    options:
+      - id: a
+        text: "A StatefulSet with a PersistentVolumeClaim."
+        explanation: "Not correct. That is the result of any other storage."
+      - id: b
+        text: "A DaemonSet."
+        explanation: "Not correct. The operator never creates a DaemonSet for the server."
+      - id: c
+        text: "A Deployment."
+        explanation: "Correct. A file database on `emptyDir` gives a Deployment."
+      - id: d
+        text: "A bare pod."
+        explanation: "Not correct. The operator creates a Deployment or a StatefulSet, not a bare pod."
+    correct_option: c
+    explanation: "Correct. A file database on `emptyDir` gives a Deployment."
+
+  - id: ats111-010-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain how the operator reaches a Perses server"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-perses-resource.md
+    prompt: "Which address does the operator use to call the Perses REST API for a `Perses` resource named `perses` in the namespace `perses`?"
+    options:
+      - id: a
+        text: "The name from `spec.service.name`, in the same namespace."
+        explanation: "Not correct. The operator ignores `spec.service.name` when it builds the address."
+      - id: b
+        text: "The IP address of the first pod, read from the pod list."
+        explanation: "Not correct. The operator does not use pod IP addresses."
+      - id: c
+        text: "`http://localhost:8080` from inside the operator pod."
+        explanation: "Not correct. The server runs in another pod, so localhost does not reach it."
+      - id: d
+        text: "`http://perses.perses.svc.cluster.local:8080`, built from the name of the `Perses` resource."
+        explanation: "Correct. The address uses the resource name, the namespace and `containerPort`."
+    correct_option: d
+    explanation: "Correct. The address uses the resource name, the namespace and `containerPort`."
+
+  - id: ats111-010-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain why spec.service.name must not change the address"
+    source_readings:
+      - sections/section-010/module-01/course-02-the-perses-resource.md
+    prompt: "You set `spec.service.name` to `perses-ui` on the `Perses` resource `perses`. What happens to the dashboards and datasources?"
+    options:
+      - id: a
+        text: "They keep syncing, because the operator reads the Service name."
+        explanation: "Not correct. The operator builds the address from the resource name."
+      - id: b
+        text: "They sync, but the pod restarts after each change."
+        explanation: "Not correct. A Service rename does not restart the pod."
+      - id: c
+        text: "They move to the project `perses-ui`."
+        explanation: "Not correct. The project comes from the namespace of the object."
+      - id: d
+        text: "They stop syncing, because the address the operator uses no longer matches a Service."
+        explanation: "Correct. The Service gets the new name, but the operator still calls the resource name."
+    correct_option: d
+    explanation: "Correct. The Service gets the new name, but the operator still calls the resource name."
+
+  - id: ats111-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the certManager.enable setting"
+    source_readings:
+      - sections/section-010/module-01/course-01-what-the-operator-does.md
+    prompt: "The playground installs the chart with `certManager.enable=false`. What is the effect?"
+    options:
+      - id: a
+        text: "The operator stops using TLS for the Perses API."
+        explanation: "Not correct. The setting concerns the operator's webhook certificate."
+      - id: b
+        text: "The CRDs are removed when the chart is uninstalled."
+        explanation: "Not correct. The chart keeps the CRDs because `crd.keep` is true."
+      - id: c
+        text: "The chart makes a self-signed webhook certificate, and only `v1alpha2` objects can be used."
+        explanation: "Correct. The conversion webhooks between versions are off."
+      - id: d
+        text: "Dashboards need no `instanceSelector`."
+        explanation: "Not correct. The setting has no effect on selectors."
+    correct_option: c
+    explanation: "Correct. The conversion webhooks between versions are off."
+
+  - id: ats111-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the Available and Degraded conditions"
+    source_readings:
+      - sections/section-010/module-01/course-03-status-and-troubleshooting.md
+    prompt: "A `Perses` resource shows `Available=True`, but the pod is in `ImagePullBackOff`. Why?"
+    options:
+      - id: a
+        text: "The operator ignores the image field."
+        explanation: "Not correct. The operator writes the image into the Deployment."
+      - id: b
+        text: "The operator sets `Available=True` when it has created or updated the objects, and it does not wait for the pod."
+        explanation: "Correct. So you always check the Deployment and send a request too."
+      - id: c
+        text: "`Available` means the Perses API answered a request."
+        explanation: "Not correct. In v0.5.0 the operator does not send that request for this condition."
+      - id: d
+        text: "`Available` and `Degraded` are only set after the pod is ready."
+        explanation: "Not correct. They are set at the end of a reconciliation."
+    correct_option: b
+    explanation: "Correct. So you always check the Deployment and send a request too."
+
+  - id: ats111-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the Degraded condition"
+    source_readings:
+      - sections/section-010/module-01/course-03-status-and-troubleshooting.md
+    prompt: "A `Perses` resource has a `spec.volumeMounts` entry with no matching volume in `spec.volumes`. What do you see?"
+    options:
+      - id: a
+        text: "`Degraded=True` with reason `InvalidConfiguration`, and the old pod keeps running."
+        explanation: "Correct. The operator stops at its check and does not change the Deployment."
+      - id: b
+        text: "`Available=False` and the Deployment is deleted."
+        explanation: "Not correct. The operator does not delete the Deployment."
+      - id: c
+        text: "`Degraded=False` and the pod crashes at start."
+        explanation: "Not correct. The operator refuses the resource before it creates anything."
+      - id: d
+        text: "The API server refuses the resource, so it is never stored."
+        explanation: "Not correct. The operator, not the API server, runs this check."
+    correct_option: a
+    explanation: "Correct. The operator stops at its check and does not change the Deployment."
+
+  - id: ats111-010-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find the operator log"
+    source_readings:
+      - sections/section-010/module-01/course-03-status-and-troubleshooting.md
+    prompt: "In which container of `perses-operator-controller-manager` do you find the reconciliation log?"
+    options:
+      - id: a
+        text: "`kube-rbac-proxy`"
+        explanation: "Not correct. That container protects the metrics endpoint."
+      - id: b
+        text: "`perses`"
+        explanation: "Not correct. That is the name of the server, not a container of the operator."
+      - id: c
+        text: "`manager`"
+        explanation: "Correct. The container `manager` runs the reconciliation."
+      - id: d
+        text: "`webhook`"
+        explanation: "Not correct. The operator pod has no container named `webhook`."
+    correct_option: c
+    explanation: "Correct. The container `manager` runs the reconciliation."
+
+  - id: ats111-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right fix for a broken server"
+    source_readings:
+      - sections/section-010/module-01/course-03-status-and-troubleshooting.md
+    prompt: "A `Perses` resource has a wrong field and the server does not serve. What is the right fix?"
+    options:
+      - id: a
+        text: "Fix the field in the `Perses` resource in place."
+        explanation: "Correct. Deleting the resource would delete the server and its `emptyDir` data."
+      - id: b
+        text: "Delete the resource and apply it again."
+        explanation: "Not correct. That deletes the server and the data on `emptyDir`."
+      - id: c
+        text: "Edit the Deployment by hand."
+        explanation: "Not correct. The operator replaces hand edits on its next reconciliation."
+      - id: d
+        text: "Delete the operator pod."
+        explanation: "Not correct. A restart of the operator does not repair the resource."
+    correct_option: a
+    explanation: "Correct. Deleting the resource would delete the server and its `emptyDir` data."
+

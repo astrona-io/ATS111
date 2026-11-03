@@ -1,0 +1,246 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats111-020
+course_id: ATS111
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Dashboards And Datasources As Kubernetes Resources"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats111-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain how a namespace becomes a project"
+    source_readings:
+      - sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+    prompt: "Into which Perses project does the operator copy a `PersesDatasource` from the namespace `payments`?"
+    options:
+      - id: a
+        text: "The project `default`."
+        explanation: "Not correct. The operator uses the namespace name."
+      - id: b
+        text: "The project `payments`, created first if it is missing."
+        explanation: "Correct. The namespace is the project."
+      - id: c
+        text: "A global datasource that every project sees."
+        explanation: "Not correct. Only a `PersesGlobalDatasource` becomes a global datasource."
+      - id: d
+        text: "The project named after the `Perses` resource."
+        explanation: "Not correct. The project comes from the namespace of the object."
+    correct_option: b
+    explanation: "Correct. The namespace is the project."
+
+  - id: ats111-020-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right URL for an HTTP proxy datasource"
+    source_readings:
+      - sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+    prompt: "A datasource uses an HTTP proxy to Prometheus. Which URL is right?"
+    options:
+      - id: a
+        text: "The cluster address, for example `http://prometheus.observability.svc.cluster.local:9090`."
+        explanation: "Correct. The Perses server sends the query, so the address must work inside the cluster."
+      - id: b
+        text: "An address that only works from your browser, such as `http://localhost:9090`."
+        explanation: "Not correct. The browser does not call Prometheus with a proxy."
+      - id: c
+        text: "The address of the Perses Service."
+        explanation: "Not correct. That would send the query back to Perses."
+      - id: d
+        text: "The address of the Perses Operator."
+        explanation: "Not correct. The operator does not answer Prometheus queries."
+    correct_option: a
+    explanation: "Correct. The Perses server sends the query, so the address must work inside the cluster."
+
+  - id: ats111-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove a datasource with a query"
+    source_readings:
+      - sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+    prompt: "Which check is the strongest proof that a datasource works?"
+    options:
+      - id: a
+        text: "`Available=True` on the `PersesDatasource`."
+        explanation: "Not correct. It proves the copy reached Perses, not that Prometheus answers."
+      - id: b
+        text: "A successful `kubectl apply`."
+        explanation: "Not correct. It only proves the API server accepted the object."
+      - id: c
+        text: "The datasource in the list of the project."
+        explanation: "Not correct. A datasource can exist and point at a wrong address."
+      - id: d
+        text: "A Prometheus API query through `/proxy/projects/<project>/datasources/<name>/`."
+        explanation: "Correct. A dashboard panel uses the same path."
+    correct_option: d
+    explanation: "Correct. A dashboard panel uses the same path."
+
+  - id: ats111-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use the tags annotation"
+    source_readings:
+      - sections/section-020/module-01/course-01-datasources-as-custom-resources.md
+    prompt: "What does the operator do with the annotation `perses.dev/tags` on a custom resource?"
+    options:
+      - id: a
+        text: "It limits which servers receive the object."
+        explanation: "Not correct. Only `instanceSelector` selects servers."
+      - id: b
+        text: "It sets the project of the object."
+        explanation: "Not correct. The project comes from the namespace."
+      - id: c
+        text: "It lower-cases the values and stores them as Perses tags."
+        explanation: "Correct. The user interface can filter on those tags."
+      - id: d
+        text: "It marks the object as read-only in Perses."
+        explanation: "Not correct. The annotation has no effect on permissions."
+    correct_option: c
+    explanation: "Correct. The user interface can filter on those tags."
+
+  - id: ats111-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what happens on delete"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "You delete a `PersesDashboard` object. What happens in Perses?"
+    options:
+      - id: a
+        text: "The dashboard stays, because Perses owns it now."
+        explanation: "Not correct. The object is the source of truth."
+      - id: b
+        text: "The dashboard is deleted from every server it was sent to, and the project stays."
+        explanation: "Correct. The operator never deletes projects."
+      - id: c
+        text: "The dashboard and the project are both deleted."
+        explanation: "Not correct. The operator never deletes a project."
+      - id: d
+        text: "The dashboard is hidden but kept in the database."
+        explanation: "Not correct. The operator deletes it through the API."
+    correct_option: b
+    explanation: "Correct. The operator never deletes projects."
+
+  - id: ats111-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what happens to edits made in Perses"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "You change a dashboard title in the Perses user interface. What happens at the next reconciliation of the object?"
+    options:
+      - id: a
+        text: "The operator copies the change back into the object."
+        explanation: "Not correct. The operator only writes from the object to Perses."
+      - id: b
+        text: "The object is marked `Degraded`."
+        explanation: "Not correct. The operator reports no error for an edit made in Perses."
+      - id: c
+        text: "The change stays forever."
+        explanation: "Not correct. The next reconciliation replaces it."
+      - id: d
+        text: "The operator overwrites the change with the content of the object."
+        explanation: "Correct. The object is the source of truth."
+    correct_option: d
+    explanation: "Correct. The object is the source of truth."
+
+  - id: ats111-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use instanceSelector"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "Which labels does `instanceSelector` read?"
+    options:
+      - id: a
+        text: "The labels in `metadata.labels` of the `Perses` resource."
+        explanation: "Correct. It matches the labels of the resource itself."
+      - id: b
+        text: "The labels in `spec.metadata.labels` of the `Perses` resource."
+        explanation: "Not correct. Those labels go onto the pods and the Service."
+      - id: c
+        text: "The labels of the Perses pod."
+        explanation: "Not correct. The selector looks at `Perses` resources, not pods."
+      - id: d
+        text: "The labels of the namespace of the dashboard."
+        explanation: "Not correct. The selector matches servers, not namespaces."
+    correct_option: a
+    explanation: "Correct. It matches the labels of the resource itself."
+
+  - id: ats111-020-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the PersesMissing reason"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "A `PersesDashboard` has the reason `PersesMissing`. What does it mean?"
+    options:
+      - id: a
+        text: "The Perses server refused the dashboard."
+        explanation: "Not correct. That is the reason `ValidationFailed`."
+      - id: b
+        text: "The operator cannot reach the server."
+        explanation: "Not correct. That is the reason `PersesConnectionFailed`."
+      - id: c
+        text: "No `Perses` resource matches its `instanceSelector`, and the operator retries every minute."
+        explanation: "Correct. The dashboard arrives when a matching server exists."
+      - id: d
+        text: "The project is missing and must be created by hand."
+        explanation: "Not correct. The operator creates the project."
+    correct_option: c
+    explanation: "Correct. The dashboard arrives when a matching server exists."
+
+  - id: ats111-020-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the ValidationFailed reason"
+    source_readings:
+      - sections/section-020/module-01/course-02-dashboards-as-custom-resources.md
+    prompt: "A dashboard layout refers to a panel that does not exist. Which reason does the object show?"
+    options:
+      - id: a
+        text: "`PersesMissing`"
+        explanation: "Not correct. A server was found, so the reason is not about selection."
+      - id: b
+        text: "`Reconciled`"
+        explanation: "Not correct. That reason belongs to a successful sync."
+      - id: c
+        text: "`ValidationFailed`, with the message of the Perses server."
+        explanation: "Correct. The operator sent the dashboard and the server refused it."
+      - id: d
+        text: "`InvalidConfiguration`"
+        explanation: "Not correct. That reason belongs to a `Perses` resource, not a dashboard."
+    correct_option: c
+    explanation: "Correct. The operator sent the dashboard and the server refused it."
+
+  - id: ats111-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know where provisioning files must be mounted"
+    source_readings:
+      - sections/section-020/module-01/course-03-provisioning-without-the-operator.md
+    prompt: "Where must you not mount extra volumes in a `Perses` resource?"
+    options:
+      - id: a
+        text: "Under `/etc/perses/provisioning`."
+        explanation: "Correct. The operator reserves that path for its own provisioning Secrets."
+      - id: b
+        text: "Under `/etc/perses/provisioned`."
+        explanation: "Not correct. That path is free to use."
+      - id: c
+        text: "Under `/etc/perses/notes`."
+        explanation: "Not correct. Any path outside the reserved one is allowed."
+      - id: d
+        text: "Under `/perses`."
+        explanation: "Not correct. That is the database folder of the example, not a reserved path."
+    correct_option: a
+    explanation: "Correct. The operator reserves that path for its own provisioning Secrets."
+

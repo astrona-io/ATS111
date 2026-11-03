@@ -1,0 +1,246 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats111-030
+course_id: ATS111
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "GitOps For Dashboards With Flux"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats111-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain the split between Flux and the operator"
+    source_readings:
+      - sections/section-030/module-01/course-01-dashboards-in-git.md
+    prompt: "Which sentence describes the two controllers correctly?"
+    options:
+      - id: a
+        text: "Flux writes dashboards into Perses, and the operator reads Git."
+        explanation: "Not correct. Flux does not talk to Perses, and the operator does not read Git."
+      - id: b
+        text: "The operator pulls Git, and Flux creates the Perses project."
+        explanation: "Not correct. Each controller stays in its own half of the chain."
+      - id: c
+        text: "Flux makes the cluster match Git, and the operator makes Perses match the cluster."
+        explanation: "Correct. Flux never talks to Perses, and the operator never reads Git."
+      - id: d
+        text: "Flux and the operator both read Git and both call the Perses API."
+        explanation: "Not correct. Only the operator calls the Perses API."
+    correct_option: c
+    explanation: "Correct. Flux never talks to Perses, and the operator never reads Git."
+
+  - id: ats111-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Lay out a dashboards repository"
+    source_readings:
+      - sections/section-030/module-01/course-01-dashboards-in-git.md
+    prompt: "What does the folder of one team in the repository hold?"
+    options:
+      - id: a
+        text: "The team's `PersesDatasource` and `PersesDashboard` files, and no `Namespace` objects."
+        explanation: "Correct. The platform creates the namespaces."
+      - id: b
+        text: "The team's `Namespace` and `Perses` objects."
+        explanation: "Not correct. Namespaces and the server stay with the platform."
+      - id: c
+        text: "A Flux `Kustomization` for every other team."
+        explanation: "Not correct. A team folder holds only what the team owns."
+      - id: d
+        text: "The Perses database files of the team."
+        explanation: "Not correct. Perses stores its own data, not Git."
+    correct_option: a
+    explanation: "Correct. The platform creates the namespaces."
+
+  - id: ats111-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell the two Kustomizations apart"
+    source_readings:
+      - sections/section-030/module-01/course-01-dashboards-in-git.md
+    prompt: "What is the difference between the Flux `Kustomization` and `kustomization.yaml`?"
+    options:
+      - id: a
+        text: "They are the same file with two names."
+        explanation: "Not correct. One is a cluster object, the other a file in Git."
+      - id: b
+        text: "The first is a Flux object in the cluster, and the second is an optional Kustomize file in the folder."
+        explanation: "Correct. They have similar names and different jobs."
+      - id: c
+        text: "The Flux object lives in Git, and the file lives in the cluster."
+        explanation: "Not correct. It is the other way round."
+      - id: d
+        text: "The Flux object is only used with Argo CD."
+        explanation: "Not correct. It belongs to Flux."
+    correct_option: b
+    explanation: "Correct. They have similar names and different jobs."
+
+  - id: ats111-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Apply a change on demand"
+    source_readings:
+      - sections/section-030/module-01/course-01-dashboards-in-git.md
+    prompt: "How do you fetch and apply a new commit now instead of waiting?"
+    options:
+      - id: a
+        text: "`kubectl rollout restart deployment/perses`"
+        explanation: "Not correct. Restarting Perses does not fetch Git."
+      - id: b
+        text: "`git push --force`"
+        explanation: "Not correct. A push only changes Git."
+      - id: c
+        text: "`kubectl delete gitrepository fleet`"
+        explanation: "Not correct. That removes the source instead of refreshing it."
+      - id: d
+        text: "`flux reconcile kustomization <name> --with-source`"
+        explanation: "Correct. It fetches the source and runs the apply."
+    correct_option: d
+    explanation: "Correct. It fetches the source and runs the apply."
+
+  - id: ats111-030-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict who corrects a hand edit of the object"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "Someone edits a `PersesDashboard` object with `kubectl patch`. Who corrects it, and when?"
+    options:
+      - id: a
+        text: "Kustomize-controller, on the next run of the Flux `Kustomization`, because server-side apply puts back every field Git sets."
+        explanation: "Correct. In this course that run is at most five minutes later."
+      - id: b
+        text: "The Perses Operator, immediately."
+        explanation: "Not correct. The operator copies the edit into Perses."
+      - id: c
+        text: "Nobody, because Flux only applies new commits."
+        explanation: "Not correct. Flux applies the folder on every run."
+      - id: d
+        text: "Source-controller, when it fetches the repository."
+        explanation: "Not correct. Source-controller only fetches."
+    correct_option: a
+    explanation: "Correct. In this course that run is at most five minutes later."
+
+  - id: ats111-030-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict who corrects an edit made in Perses"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "Someone edits a dashboard title in the Perses user interface. Why does Flux not fix it?"
+    options:
+      - id: a
+        text: "Flux does not support dashboards."
+        explanation: "Not correct. Flux applies any Kubernetes object."
+      - id: b
+        text: "Flux only checks Perses once a day."
+        explanation: "Not correct. Flux never checks Perses."
+      - id: c
+        text: "The object in the cluster still matches Git, so Flux sees no difference."
+        explanation: "Correct. Only a reconciliation of the object by the operator writes the object back."
+      - id: d
+        text: "The edit is saved in Git automatically."
+        explanation: "Not correct. Perses never writes to Git."
+    correct_option: c
+    explanation: "Correct. Only a reconciliation of the object by the operator writes the object back."
+
+  - id: ats111-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trigger the operator on demand"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "What starts a reconciliation of a `PersesDashboard` object on demand?"
+    options:
+      - id: a
+        text: "`flux reconcile kustomization` when Git did not change."
+        explanation: "Not correct. Flux changes nothing when the object matches Git."
+      - id: b
+        text: "Restarting the Gitea pod."
+        explanation: "Not correct. Gitea is not part of the operator's loop."
+      - id: c
+        text: "Deleting the project in Perses."
+        explanation: "Not correct. That does not touch the object."
+      - id: d
+        text: "Any change to the object, such as adding an annotation."
+        explanation: "Correct. The operator then writes the object's version back to Perses."
+    correct_option: d
+    explanation: "Correct. The operator then writes the object's version back to Perses."
+
+  - id: ats111-030-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain pruning"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "What does pruning do?"
+    options:
+      - id: a
+        text: "It deletes objects that Flux never applied."
+        explanation: "Not correct. Pruning only uses the inventory."
+      - id: b
+        text: "It deletes objects that Flux applied before and that are no longer in Git."
+        explanation: "Correct. Flux uses the inventory in the `Kustomization` status."
+      - id: c
+        text: "It removes old commits from Git."
+        explanation: "Not correct. Pruning acts on the cluster."
+      - id: d
+        text: "It deletes the Perses project when it is empty."
+        explanation: "Not correct. The operator never deletes projects."
+    correct_option: b
+    explanation: "Correct. Flux uses the inventory in the `Kustomization` status."
+
+  - id: ats111-030-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know the effect of prune false"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "A file is removed from Git while `prune: false`. Later you set `prune: true`. What happens to the dashboard?"
+    options:
+      - id: a
+        text: "Flux deletes it on the next run."
+        explanation: "Not correct. The inventory no longer lists it."
+      - id: b
+        text: "It stays in the cluster and in Perses until someone deletes it by hand."
+        explanation: "Correct. It dropped out of the inventory without being deleted."
+      - id: c
+        text: "The operator deletes it from Perses."
+        explanation: "Not correct. The object still exists, so the operator keeps the dashboard."
+      - id: d
+        text: "Flux marks the `Kustomization` as failed."
+        explanation: "Not correct. Flux reports no error for an orphan."
+    correct_option: b
+    explanation: "Correct. It dropped out of the inventory without being deleted."
+
+  - id: ats111-030-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read what a ready Kustomization proves"
+    source_readings:
+      - sections/section-030/module-01/course-02-drift-pruning-and-the-operator.md
+    prompt: "What does a ready Flux `Kustomization` prove?"
+    options:
+      - id: a
+        text: "The objects are in the cluster. The object's conditions show whether they reached Perses."
+        explanation: "Correct. Flux is done once the custom resource is correct in the cluster."
+      - id: b
+        text: "The dashboards are served by Perses."
+        explanation: "Not correct. Only the conditions of the object and a Perses request prove that."
+      - id: c
+        text: "The operator reconciled every object."
+        explanation: "Not correct. Flux does not see the operator."
+      - id: d
+        text: "Pruning is switched on."
+        explanation: "Not correct. Pruning is a separate field."
+    correct_option: a
+    explanation: "Correct. Flux is done once the custom resource is correct in the cluster."
+
