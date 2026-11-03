@@ -26,16 +26,17 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | Running Perses With The Perses Operator | 1 | 1 + capstone | Operator |
-| [020](sections/section-020) | Dashboards And Datasources As Kubernetes Resources | 1 | 1 + capstone | Custom resources |
-| [030](sections/section-030) | GitOps For Dashboards With Flux | 1 | 1 + capstone | GitOps |
-| [040](sections/section-040) | Multi-Tenant Isolation | 1 | 1 + capstone | Multi-tenancy |
+| [010](sections/section-010) | Running Perses With The Perses Operator | 2 | 2 + capstone | Operator |
+| [020](sections/section-020) | Dashboards And Datasources As Kubernetes Resources | 2 | 2 + capstone | Custom resources |
+| [030](sections/section-030) | GitOps For Dashboards With Flux | 2 | 2 + capstone | GitOps |
+| [040](sections/section-040) | Multi-Tenant Isolation | 2 | 2 + capstone | Multi-tenancy |
+| [050](sections/section-050) | Operating Perses Day To Day | 1 | 1 + capstone | Operations |
 
 The order goes from the server to the teams. Section 010 runs the Perses
 server from a `Perses` resource. Section 020 declares the teams' dashboards
 and datasources as custom resources. Section 030 delivers those resources from
 Git with Flux, and section 040 keeps the teams apart with namespaces, RBAC and
-Flux impersonation.
+Flux impersonation. Section 050 operates the result: backups, upgrades and troubleshooting.
 
 ---
 
@@ -43,10 +44,15 @@ Flux impersonation.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Run Perses With The Perses Operator](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-01 | [Run Perses With The Perses Operator](sections/section-010/module-01/course.md) | 4 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [Configure The Perses Server](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
 | 020-01 | [Declare Dashboards And Datasources In Namespaces](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Route And Shape Team Resources](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
 | 030-01 | [Reconcile Dashboards From Git](sections/section-030/module-01/course.md) | 2 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Operate Flux Delivery For Perses](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
 | 040-01 | [Isolate Teams That Share One Perses Server](sections/section-040/module-01/course.md) | 2 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-02 | [Limit And Harden The Shared Server](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
+| 050-01 | [Operate Perses Day To Day](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
 
 ---
 
@@ -58,6 +64,7 @@ Flux impersonation.
 | [020](sections/section-020/capstone/labs/lab-01) | Fix Dashboards That Never Reach Perses | the selector label only under `spec.metadata.labels`, a layout pointing at a missing panel, a datasource URL in the wrong namespace |
 | [030](sections/section-030/capstone/labs/lab-01) | Repair A Dashboard Delivery Pipeline | a wrong Flux path, pruning off with an orphaned dashboard, a dashboard Perses refuses |
 | [040](sections/section-040/capstone/labs/lab-01) | Lock Down Two Tenants Delivered By Flux | a missing RoleBinding, no impersonation, a cluster-admin binding, a cross-namespace dashboard in Git |
+| [050](sections/section-050/capstone/labs/lab-01) | Recover A Broken Perses Platform | a wrong image tag, a selector that matches no server, a layout that points at a missing panel |
 
 ---
 
@@ -72,7 +79,7 @@ Every playground and lab is a **kind** cluster with:
   `kubectl -n perses port-forward svc/perses 8080:8080`, at
   `http://perses.localtest.me:8080`;
 - Prometheus v3.15.1 and a `tester` pod in the namespace `observability`;
-- in sections 030 and 040, Gitea (`gitops/fleet`) and Flux v2.9.6, set up
+- in sections 030 and 040 (and the Flux modules), Gitea (`gitops/fleet`) and Flux v2.9.6, set up
   the same way as in the first course of the FluxCD path.
 
 ## Running a playground

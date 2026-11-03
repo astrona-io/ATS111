@@ -14,10 +14,11 @@ This section comes after the custom resources, because Flux only moves objects; 
 - What happens when someone edits a dashboard object by hand, and when someone edits the dashboard inside Perses.
 - How pruning removes a dashboard that was deleted from Git, and what happens when pruning is off.
 - Where Argo CD fits as the other common GitOps agent.
+- Ordering deliveries with `dependsOn` and health checks, Kustomize overlays, `postBuild` substitution and finding a stuck sync.
 
 ## The learning path
 
-The module has a landing page, two short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The first module has a landing page, two short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Reconcile Dashboards From Git
 
@@ -26,6 +27,16 @@ The playground runs the operator, one Perses server, Gitea with the repository `
 1. Dashboards In Git, Applied By Flux
 2. Drift, Pruning And The Operator, followed by the lab **Deliver Dashboards From Git With Flux**
 3. Summary
+
+### 2. Operate Flux Delivery For Perses
+
+The second module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Its playground runs the operator, Gitea with `gitops/fleet` and Flux.
+
+1. Order And Health
+2. Overlays With Kustomize
+3. Variables From The Cluster, followed by the lab **Deliver An Ordered, Parameterised Ops Pipeline**
+4. Find Out Why A Sync Is Stuck
+5. Summary
 
 ## Section capstone: Repair A Dashboard Delivery Pipeline
 

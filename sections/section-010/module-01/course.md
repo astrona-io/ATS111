@@ -4,7 +4,7 @@ A Perses server is a single Go program that serves dashboards over HTTP and stor
 
 The Perses Operator changes that. An operator is a controller, a program in the cluster that watches objects of some kinds and changes the cluster until it matches them. You declare one `Perses` resource, and the operator creates and updates the Deployment, the Service and the configuration for it. Keep one sentence in mind: **you change the `Perses` resource, and the operator changes everything else.**
 
-The module has three parts. **What The Perses Operator Does** explains the controller, its custom resources and how it is installed with Helm. **The Perses Resource** walks through the fields of the resource and the objects the operator creates from it, including the address the operator uses to reach the server. **Status Conditions And Troubleshooting** shows how to read the `Available` and `Degraded` conditions, the operator log and the events when a server does not run. A graded lab follows the third part.
+The module has four parts. **What The Perses Operator Does** explains the controller, its custom resources and how it is installed with Helm. **The Perses Resource** walks through the fields of the resource and the objects the operator creates from it, including the address the operator uses to reach the server. **Status Conditions And Troubleshooting** shows how to read the `Available` and `Degraded` conditions, the operator log and the events when a server does not run. **Install And Upgrade The Operator** reads the Helm release, explains where the CRDs come from and gives a safe order for an upgrade. A graded lab follows the third part.
 
 ## Learning objectives
 
@@ -17,6 +17,7 @@ After this module you can:
 - Explain how the operator reaches a Perses server and why `spec.service.name` must not change it.
 - Read the `Available` and `Degraded` conditions and explain why `Available` alone does not prove a running server.
 - Find the cause of a server that never serves with the conditions, the operator log and the events.
+- Read the Helm release of the operator and upgrade it in a safe order.
 
 ## Before you start
 

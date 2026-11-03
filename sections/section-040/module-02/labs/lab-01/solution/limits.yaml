@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dashboard-cap
+  namespace: payments
+spec:
+  hard:
+    count/persesdashboards.perses.dev: "2"
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dashboard-cap
+  namespace: catalog
+spec:
+  hard:
+    count/persesdashboards.perses.dev: "3"
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: perses-ingress
+  namespace: perses
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: perses-operator
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      ports:
+        - protocol: TCP
+          port: 8080

@@ -14,10 +14,11 @@ This section comes right after the operator, because a team's dashboard is the r
 - How `instanceSelector` picks the Perses servers, and which labels it reads.
 - What the operator does when you change or delete an object, and when Perses refuses a dashboard.
 - Loading resources from files with Perses provisioning, the way without the operator.
+- Routing resources with `instanceSelector`, datasource proxy limits, variables and layouts, and safe previews.
 
 ## The learning path
 
-The module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The first module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Declare Dashboards And Datasources In Namespaces
 
@@ -27,6 +28,16 @@ The playground runs the operator, one Perses server, Prometheus, and the empty n
 2. Dashboards As Custom Resources, followed by the lab **Give Two Teams Their Own Dashboards**
 3. Provisioning Without The Operator
 4. Summary
+
+### 2. Route And Shape Team Resources
+
+The second module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Its playground runs two Perses servers and the namespaces `payments` and `catalog`.
+
+1. Several Servers And Selectors
+2. Datasource Proxy Settings, followed by the lab **Send A Dashboard To Staging And Limit Its Datasource**
+3. Variables And Layouts In The Dashboard Spec
+4. Preview And Change Safely
+5. Summary
 
 ## Section capstone: Fix Dashboards That Never Reach Perses
 

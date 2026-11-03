@@ -20,7 +20,8 @@ training:
     Operator, running a Perses server from a Perses resource and reading its
     status, declaring dashboards and datasources as custom resources in
     application namespaces, delivering them from Git with Flux, and keeping
-    teams apart with namespaces, Kubernetes RBAC and Flux impersonation.
+    teams apart with namespaces, Kubernetes RBAC and Flux impersonation,
+    and operating the platform: limits, backups, upgrades and troubleshooting.
     Each module pairs a layered reader with an ungraded hands-on playground
     and a graded practice lab. Each section closes with an integration
     capstone. Written for the Perses Operator v0.5.0 and Perses v0.54.0.
@@ -99,8 +100,50 @@ modules:
           - name: "Perses Operator API reference"
             url: https://perses.dev/perses-operator/docs/api/
       - type: reading
-        title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        title: "Install And Upgrade The Operator"
+        path: sections/section-010/module-01/course-04-install-and-upgrade.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Configure The Perses Server"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Persistent Storage And Workload Kinds"
+        path: sections/section-010/module-02/course-01-persistent-storage.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Make Perses Data Survive A Restart Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: operator
+        task_kind: build
+        tags: [storage, stateful-set, pvc, perses-cr]
+        learning_goals:
+          - Change the storage of a Perses resource so its database survives a pod restart
+          - Read the workload kind that the operator creates for each storage setting
+          - Prove it by creating a project, deleting the pod and reading the project again
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses Operator API reference"
+            url: https://perses.dev/perses-operator/docs/api/
+      - type: reading
+        title: "The Server Configuration In spec.config"
+        path: sections/section-010/module-02/course-02-server-configuration.md
+      - type: reading
+        title: "Pod Settings And Replicas"
+        path: sections/section-010/module-02/course-03-pod-settings-and-replicas.md
+      - type: reading
+        title: "TLS, Provisioning And The Operator Client"
+        path: sections/section-010/module-02/course-04-tls-provisioning-client.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -179,6 +222,45 @@ modules:
         path: sections/section-020/module-01/course-04-summary.md
 
       - type: reading
+        title: "Route And Shape Team Resources"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Several Servers And Selectors"
+        path: sections/section-020/module-02/course-01-several-servers-and-selectors.md
+      - type: reading
+        title: "Datasource Proxy Settings"
+        path: sections/section-020/module-02/course-02-datasource-proxy-settings.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Send A Dashboard To Staging And Limit Its Datasource Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: custom-resources
+        task_kind: build
+        tags: [instance-selector, datasource-proxy, allowed-endpoints, perses-dashboard]
+        learning_goals:
+          - Route a dashboard to one of two Perses servers with an instanceSelector
+          - Limit a Prometheus datasource proxy with allowedEndpoints
+          - Prove that needed endpoints work and an endpoint outside the list is refused
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses datasource documentation"
+            url: https://perses.dev/perses/docs/concepts/datasource/
+      - type: reading
+        title: "Variables And Layouts In The Dashboard Spec"
+        path: sections/section-020/module-02/course-03-variables-and-layouts.md
+      - type: reading
+        title: "Preview And Change Safely"
+        path: sections/section-020/module-02/course-04-preview-and-change-safely.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-02/course-05-summary.md
+
+      - type: reading
         title: Question
         path: sections/section-020/capstone/labs/lab-01/question.md
       - type: lab
@@ -249,6 +331,45 @@ modules:
       - type: reading
         title: Summary
         path: sections/section-030/module-01/course-03-summary.md
+
+      - type: reading
+        title: "Operate Flux Delivery For Perses"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Order And Health"
+        path: sections/section-030/module-02/course-01-order-and-health.md
+      - type: reading
+        title: "Overlays With Kustomize"
+        path: sections/section-030/module-02/course-02-overlays-with-kustomize.md
+      - type: reading
+        title: "Variables From The Cluster"
+        path: sections/section-030/module-02/course-03-variables-from-the-cluster.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Deliver An Ordered, Parameterised Ops Pipeline Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: gitops
+        task_kind: build
+        tags: [depends-on, health-checks, kustomize-overlay, post-build]
+        learning_goals:
+          - Deliver datasources before dashboards with dependsOn and health checks
+          - Build team dashboards from a base and overlays
+          - Fill values from a ConfigMap with postBuild.substituteFrom
+        resources:
+          - name: "Flux Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "Kustomize documentation"
+            url: https://kubectl.docs.kubernetes.io/references/kustomize/
+      - type: reading
+        title: "Find Out Why A Sync Is Stuck"
+        path: sections/section-030/module-02/course-04-find-out-why-a-sync-is-stuck.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -322,6 +443,45 @@ modules:
         path: sections/section-040/module-01/course-03-summary.md
 
       - type: reading
+        title: "Limit And Harden The Shared Server"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "Cap What A Team Can Create"
+        path: sections/section-040/module-02/course-01-cap-what-a-team-can-create.md
+      - type: reading
+        title: "Restrict Who Can Call The Server"
+        path: sections/section-040/module-02/course-02-restrict-who-can-call-the-server.md
+      - type: reading
+        title: "Question"
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Cap A Team And Limit The Callers Of The Server Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [resource-quota, network-policy, count-quota, service-account]
+        learning_goals:
+          - Cap the number of dashboards a team can create with a ResourceQuota
+          - Limit which namespaces may call the Perses server with a NetworkPolicy
+          - Prove the limits with a refused object and a refused caller
+        resources:
+          - name: "Kubernetes resource quotas"
+            url: https://kubernetes.io/docs/concepts/policy/resource-quotas/
+          - name: "Kubernetes network policies"
+            url: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+      - type: reading
+        title: "Read-Only Mode And Server Authentication"
+        path: sections/section-040/module-02/course-03-read-only-mode-and-server-authentication.md
+      - type: reading
+        title: "Least Privilege For The Operator"
+        path: sections/section-040/module-02/course-04-least-privilege-for-the-operator.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-040/module-02/course-05-summary.md
+
+      - type: reading
         title: Question
         path: sections/section-040/capstone/labs/lab-01/question.md
       - type: lab
@@ -346,6 +506,83 @@ modules:
       - type: quiz
         title: "Knowledge Check: Multi-Tenant Isolation"
         path: sections/section-040/quiz.yaml
+        pass_score: 70
+
+  - id: module-050
+    title: "Operating Perses Day To Day"
+    description: >
+      Reading the conditions, events and logs of a Perses platform, backing
+      up and restoring data that has no source in Git, changing and upgrading
+      the operator and its servers safely, and a playbook for finding the
+      cause when something stops.
+
+    content:
+      - type: reading
+        title: "Section Overview"
+        path: sections/section-050/README.md
+
+      - type: reading
+        title: "Operate Perses Day To Day"
+        path: sections/section-050/module-01/course.md
+      - type: reading
+        title: "See What The Platform Is Doing"
+        path: sections/section-050/module-01/course-01-see-what-the-platform-is-doing.md
+      - type: reading
+        title: "Back Up And Restore Perses Data"
+        path: sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+      - type: reading
+        title: "Question"
+        path: sections/section-050/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Restore A Lost Project From A Backup Lab"
+        path: sections/section-050/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: operations
+        task_kind: build
+        tags: [backup, restore, perses-api, config-map]
+        learning_goals:
+          - Restore a deleted project and its dashboard through the Perses API from a ConfigMap backup
+          - Back up the dashboards of a second project to a new ConfigMap
+          - Keep the existing backup and the live project unchanged
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses API documentation"
+            url: https://perses.dev/perses/docs/api/
+      - type: reading
+        title: "Change And Upgrade Safely"
+        path: sections/section-050/module-01/course-03-change-and-upgrade-safely.md
+      - type: reading
+        title: "A Troubleshooting Playbook"
+        path: sections/section-050/module-01/course-04-a-troubleshooting-playbook.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-050/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Question"
+        path: sections/section-050/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Recover A Broken Perses Platform Capstone"
+        path: sections/section-050/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: operations
+        task_kind: troubleshooting
+        tags: [conditions, events, instance-selector, layout-reference, image]
+        learning_goals:
+          - Find why a Perses server never runs from its conditions and events
+          - Correct a selector that matches no server and a layout that refers to a missing panel
+          - Prove that both dashboards are served by the right server
+        resources:
+          - name: "Perses Operator user guide"
+            url: https://perses.dev/perses-operator/docs/user-guide/
+          - name: "Perses Operator API reference"
+            url: https://perses.dev/perses-operator/docs/api/
+      - type: quiz
+        title: "Knowledge Check: Operating Perses Day To Day"
+        path: sections/section-050/quiz.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

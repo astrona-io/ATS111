@@ -14,10 +14,12 @@ This section comes first because every later topic sits on top of it. Dashboards
 - Which workload the operator creates (a Deployment or a StatefulSet) and how it names it.
 - How the operator reaches each Perses server, and why renaming the Service breaks it.
 - Reading the `Available` and `Degraded` conditions, the operator log and the Kubernetes events.
+- Configuring the server: storage and workload kinds, `spec.config`, pod settings and replicas, TLS, provisioning and `spec.client`.
+- Installing and upgrading the operator with Helm.
 
 ## The learning path
 
-The module has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, a cluster where you can explore freely.
+The first module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, a cluster where you can explore freely.
 
 ### 1. Run Perses With The Perses Operator
 
@@ -26,7 +28,18 @@ The playground runs the operator and a Perses server declared as a `Perses` reso
 1. What The Perses Operator Does
 2. The Perses Resource
 3. Status Conditions And Troubleshooting, followed by the lab **Fix A Perses Server That Never Serves**
-4. Summary
+4. Install And Upgrade The Operator
+5. Summary
+
+### 2. Configure The Perses Server
+
+The second module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Its playground runs the operator and a Perses server with an `emptyDir` database.
+
+1. Persistent Storage And Workload Kinds, followed by the lab **Make Perses Data Survive A Restart**
+2. The Server Configuration In spec.config
+3. Pod Settings And Replicas
+4. TLS, Provisioning And The Operator Client
+5. Summary
 
 ## Section capstone: Make The Operator Reach Its Perses Server
 

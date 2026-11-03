@@ -1,0 +1,62 @@
+# Make Perses Data Survive A Restart
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-010-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-010-02-setup"
+      description: "Creates the empty namespace archive"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-perses-status"
+      description: "The Perses resource archive is Available and not Degraded"
+      type: "file"
+      source: "validation/validate-perses-status.sh"
+    - name: "validate-statefulset-claim"
+      description: "The operator created a StatefulSet and a bound claim of 1Gi, and no Deployment"
+      type: "file"
+      source: "validation/validate-statefulset-claim.sh"
+    - name: "validate-memory-limit"
+      description: "The Perses container has a memory limit of 512Mi"
+      type: "file"
+      source: "validation/validate-memory-limit.sh"
+    - name: "validate-project-survives"
+      description: "The project records is on the server and survives the deletion of the pod"
+      type: "file"
+      source: "validation/validate-project-survives.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

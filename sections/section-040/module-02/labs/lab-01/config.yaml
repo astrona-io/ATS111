@@ -1,0 +1,62 @@
+# Cap A Team And Limit The Callers Of The Server
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-lab-040-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-lab-040-02-setup"
+      description: "Creates one dashboard in payments and leaves quotas and policies out"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-quotas"
+      description: "Both quotas exist with the values 2 and 3"
+      type: "file"
+      source: "validation/validate-quotas.sh"
+    - name: "validate-cap-enforced"
+      description: "A second dashboard fits in payments and a third is refused"
+      type: "file"
+      source: "validation/validate-cap-enforced.sh"
+    - name: "validate-operator-delivers"
+      description: "A new dashboard becomes Available after the policy exists"
+      type: "file"
+      source: "validation/validate-operator-delivers.sh"
+    - name: "validate-network-policy"
+      description: "The NetworkPolicy allows exactly the two namespaces on TCP 8080"
+      type: "file"
+      source: "validation/validate-network-policy.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

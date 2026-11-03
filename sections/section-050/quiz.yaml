@@ -1,0 +1,245 @@
+# Knowledge check for section 050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats111-050
+course_id: ATS111
+exam_code: PERSES
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-050
+  title: "Operating Perses Day To Day"
+placement:
+  position: after
+  reading: sections/section-050/capstone/labs/lab-01/question.md
+questions:
+  - id: ats111-050-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read state in order"
+    source_readings:
+      - sections/section-050/module-01/course-01-see-what-the-platform-is-doing.md
+    prompt: "What do you read first when a Perses object does not work?"
+    options:
+      - id: a
+        text: "The node logs."
+        explanation: "Not correct. They are too far from the cause."
+      - id: b
+        text: "Its status conditions."
+        explanation: "Correct. They are the operator's own summary."
+      - id: c
+        text: "The operator's source code."
+        explanation: "Not correct. Start with the object."
+      - id: d
+        text: "The Git history."
+        explanation: "Not correct. Read the cluster state first."
+    correct_option: b
+    explanation: "Correct. They are the operator's own summary."
+
+  - id: ats111-050-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the limits of events"
+    source_readings:
+      - sections/section-050/module-01/course-01-see-what-the-platform-is-doing.md
+    prompt: "What is true about Kubernetes events?"
+    options:
+      - id: a
+        text: "They are kept forever."
+        explanation: "Not correct. They expire."
+      - id: b
+        text: "They hold the logs of the pod."
+        explanation: "Not correct. Logs are separate."
+      - id: c
+        text: "They are kept for a short time, so read them soon after the problem."
+        explanation: "Correct. They expire."
+      - id: d
+        text: "They are written by the user."
+        explanation: "Not correct. Controllers write them."
+    correct_option: c
+    explanation: "Correct. They expire."
+
+  - id: ats111-050-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Decide what to back up"
+    source_readings:
+      - sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+    prompt: "Which data needs a backup?"
+    options:
+      - id: a
+        text: "Dashboards delivered from Git."
+        explanation: "Not correct. Git is the copy."
+      - id: b
+        text: "Every custom resource."
+        explanation: "Not correct. The cluster and Git hold them."
+      - id: c
+        text: "Nothing. The operator keeps a copy."
+        explanation: "Not correct. It does not."
+      - id: d
+        text: "Projects and dashboards made in the interface or the API, with no custom resource or Git source."
+        explanation: "Correct. They live only in the database."
+    correct_option: d
+    explanation: "Correct. They live only in the database."
+
+  - id: ats111-050-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Restore in order"
+    source_readings:
+      - sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+    prompt: "In which order do you restore a project and its dashboards through the API?"
+    options:
+      - id: a
+        text: "The project first, then each dashboard."
+        explanation: "Correct. A dashboard needs its project."
+      - id: b
+        text: "The dashboards first."
+        explanation: "Not correct. The server refuses them."
+      - id: c
+        text: "Both at once as one list."
+        explanation: "Not correct. The API takes one object at a time."
+      - id: d
+        text: "The order does not matter."
+        explanation: "Not correct. It does."
+    correct_option: a
+    explanation: "Correct. A dashboard needs its project."
+
+  - id: ats111-050-q05
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Handle operator-owned objects"
+    source_readings:
+      - sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+    prompt: "An object owned by the operator is lost on the server. How do you bring it back?"
+    options:
+      - id: a
+        text: "Restore it from a JSON file by hand."
+        explanation: "Not correct. The operator owns it."
+      - id: b
+        text: "Fix the custom resource and let the operator send it again."
+        explanation: "Correct. The resource is the source."
+      - id: c
+        text: "Create it in the interface."
+        explanation: "Not correct. The next reconcile may remove it."
+      - id: d
+        text: "Delete the CRD."
+        explanation: "Not correct. That removes every object."
+    correct_option: b
+    explanation: "Correct. The resource is the source."
+
+  - id: ats111-050-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Judge a backup"
+    source_readings:
+      - sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+    prompt: "When do you know a backup works?"
+    options:
+      - id: a
+        text: "When the file exists."
+        explanation: "Not correct. It may be empty or wrong."
+      - id: b
+        text: "When the ConfigMap is created."
+        explanation: "Not correct. That only stores it."
+      - id: c
+        text: "After you have restored it."
+        explanation: "Correct. Only a restore proves it."
+      - id: d
+        text: "When the size is large."
+        explanation: "Not correct. Size proves nothing."
+    correct_option: c
+    explanation: "Correct. Only a restore proves it."
+
+  - id: ats111-050-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Change through the resource"
+    source_readings:
+      - sections/section-050/module-01/course-03-change-and-upgrade-safely.md
+    prompt: "Where do you change the memory limit of a managed Perses server?"
+    options:
+      - id: a
+        text: "On the Deployment."
+        explanation: "Not correct. The operator may put the old value back."
+      - id: b
+        text: "On the pod."
+        explanation: "Not correct. Pods cannot be edited that way."
+      - id: c
+        text: "In the Perses interface."
+        explanation: "Not correct. It does not hold pod settings."
+      - id: d
+        text: "On the `Perses` resource."
+        explanation: "Correct. The operator reconciles the Deployment from it."
+    correct_option: d
+    explanation: "Correct. The operator reconciles the Deployment from it."
+
+  - id: ats111-050-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a failed rollout"
+    source_readings:
+      - sections/section-050/module-01/course-03-change-and-upgrade-safely.md
+    prompt: "A new image tag does not exist. What happens to the old pod during the rolling update?"
+    options:
+      - id: a
+        text: "It keeps serving while the new pod fails to start."
+        explanation: "Correct. A rolling update waits for the new pod."
+      - id: b
+        text: "It is stopped first."
+        explanation: "Not correct. That would be a recreate."
+      - id: c
+        text: "It is deleted with its data."
+        explanation: "Not correct. Nothing is deleted."
+      - id: d
+        text: "It restarts in a loop."
+        explanation: "Not correct. The new pod is the one that fails."
+    correct_option: a
+    explanation: "Correct. A rolling update waits for the new pod."
+
+  - id: ats111-050-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Order an upgrade"
+    source_readings:
+      - sections/section-050/module-01/course-03-change-and-upgrade-safely.md
+    prompt: "What is the order of an operator upgrade?"
+    options:
+      - id: a
+        text: "The operator first, then the definitions."
+        explanation: "Not correct. New code may need new definitions."
+      - id: b
+        text: "Back up, upgrade the definitions, then the operator, then one non-production server, then the rest."
+        explanation: "Correct. Each step limits the risk of the next."
+      - id: c
+        text: "All servers at once."
+        explanation: "Not correct. There is no test."
+      - id: d
+        text: "Delete the CRDs, then install."
+        explanation: "Not correct. Deleting removes every object."
+    correct_option: b
+    explanation: "Correct. Each step limits the risk of the next."
+
+  - id: ats111-050-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Find a silent failure"
+    source_readings:
+      - sections/section-050/module-01/course-04-a-troubleshooting-playbook.md
+    prompt: "A dashboard is in the cluster but not on the server and shows no error. What do you check?"
+    options:
+      - id: a
+        text: "The Prometheus version."
+        explanation: "Not correct. It is unrelated."
+      - id: b
+        text: "The node disk."
+        explanation: "Not correct. It is unrelated."
+      - id: c
+        text: "Its `instanceSelector` against the labels of the `Perses` resources."
+        explanation: "Correct. A selector that matches no server reports no error."
+      - id: d
+        text: "The operator image tag."
+        explanation: "Not correct. The operator is working."
+    correct_option: c
+    explanation: "Correct. A selector that matches no server reports no error."

@@ -13,10 +13,11 @@ This section comes last because it builds on everything before it: the custom re
 - Checking permissions with `kubectl auth can-i` and applying objects as a team with impersonation.
 - Flux `Kustomization` objects that act as a team's ServiceAccount, and the Flux lockdown options.
 - Where Perses' own authentication and authorization fit, and what the operator needs when they are on.
+- Resource quotas, NetworkPolicy, read-only mode, server authentication and least privilege for the operator.
 
 ## The learning path
 
-The module has a landing page, two short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The first module has a landing page, two short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
 
 ### 1. Isolate Teams That Share One Perses Server
 
@@ -25,6 +26,16 @@ The playground runs the operator, one Perses server, Gitea with `gitops/fleet`, 
 1. Kubernetes RBAC For Perses Resources, followed by the lab **Keep Each Team In Its Own Namespace**
 2. Tenant Pipelines And Perses Authorization
 3. Summary
+
+### 2. Limit And Harden The Shared Server
+
+The second module has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Its playground runs the operator, one Perses server and the namespaces `payments` and `catalog`.
+
+1. Cap What A Team Can Create
+2. Restrict Who Can Call The Server, followed by the lab **Cap A Team And Limit The Callers Of The Server**
+3. Read-Only Mode And Server Authentication
+4. Least Privilege For The Operator
+5. Summary
 
 ## Section capstone: Lock Down Two Tenants Delivered By Flux
 

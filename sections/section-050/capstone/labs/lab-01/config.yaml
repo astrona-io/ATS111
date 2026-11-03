@@ -1,0 +1,62 @@
+# Recover A Broken Perses Platform
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-111-capstone-050"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-perses-operator"
+      description: "Installs Helm, percli, Prometheus, the tester pod and the Perses Operator 0.5.0"
+      type: "file"
+      source: "bootstrap/01-install-perses-operator.sh"
+    - name: "ats-111-capstone-050-setup"
+      description: "Creates the server reports with a wrong image tag and the dashboards weekly (wrong selector) and monthly (missing panel)"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Prometheus and the tester pod in the namespace observability."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-perses"
+      description: "Waits until the operator and the Perses server answer"
+      type: "file"
+      source: "testing/wait-for-perses.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-server-available"
+      description: "The Perses resource reports is Available, not Degraded, and uses the right image"
+      type: "file"
+      source: "validation/validate-server-available.sh"
+    - name: "validate-dashboards-available"
+      description: "Both dashboards are Available"
+      type: "file"
+      source: "validation/validate-dashboards-available.sh"
+    - name: "validate-served-by-reports"
+      description: "The server reports serves both dashboards and perses serves neither"
+      type: "file"
+      source: "validation/validate-served-by-reports.sh"
+    - name: "validate-reference-kept"
+      description: "monthly keeps the reference to the panel totals and defines it"
+      type: "file"
+      source: "validation/validate-reference-kept.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - docker.io/persesdev/perses:v0.54.0
+      - nicolaka/netshoot:v0.13
+      - prom/prometheus:v3.15.1

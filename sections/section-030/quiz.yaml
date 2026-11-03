@@ -244,3 +244,233 @@ questions:
     correct_option: a
     explanation: "Correct. Flux is done once the custom resource is correct in the cluster."
 
+
+  - id: ats111-030-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order deliveries"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "What does `dependsOn` on a Flux `Kustomization` do?"
+    options:
+      - id: a
+        text: "It applies the listed Kustomizations first by itself."
+        explanation: "Not correct. It only waits."
+      - id: b
+        text: "It copies their files into its own path."
+        explanation: "Not correct. Each keeps its own path."
+      - id: c
+        text: "It fixes failing health checks."
+        explanation: "Not correct. It does not repair anything."
+      - id: d
+        text: "It waits until the listed Kustomizations are `Ready` before it applies."
+        explanation: "Correct. Without it there is no order."
+    correct_option: d
+    explanation: "Correct. Without it there is no order."
+
+  - id: ats111-030-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a blocked delivery"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "A delivery is blocked by `dependsOn`. What does it do?"
+    options:
+      - id: a
+        text: "It applies nothing new and deletes nothing, and tries again at its next interval."
+        explanation: "Correct. A block only holds back new work."
+      - id: b
+        text: "It deletes the objects it applied before."
+        explanation: "Not correct. Nothing is deleted."
+      - id: c
+        text: "It applies anyway after one minute."
+        explanation: "Not correct. It keeps waiting."
+      - id: d
+        text: "It turns itself off."
+        explanation: "Not correct. It stays active and retries."
+    correct_option: a
+    explanation: "Correct. A block only holds back new work."
+
+  - id: ats111-030-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Define healthy"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "What does `Ready` mean on a Kustomization with no `wait` and no `healthChecks`?"
+    options:
+      - id: a
+        text: "Every object is `Available`."
+        explanation: "Not correct. That needs `wait` or `healthChecks`."
+      - id: b
+        text: "The apply succeeded."
+        explanation: "Correct. Health is only checked when you ask for it."
+      - id: c
+        text: "Perses accepted the dashboards."
+        explanation: "Not correct. Perses is not asked."
+      - id: d
+        text: "The Git commit was reviewed."
+        explanation: "Not correct. Flux does not review commits."
+    correct_option: b
+    explanation: "Correct. Health is only checked when you ask for it."
+
+  - id: ats111-030-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Bound a health check"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "Which field bounds how long Flux waits for the health checks?"
+    options:
+      - id: a
+        text: "`interval`"
+        explanation: "Not correct. It sets how often Flux reconciles."
+      - id: b
+        text: "`retryInterval`"
+        explanation: "Not correct. It sets the wait after a failure."
+      - id: c
+        text: "`timeout`"
+        explanation: "Correct. It limits the wait."
+      - id: d
+        text: "`prune`"
+        explanation: "Not correct. It controls removal of objects."
+    correct_option: c
+    explanation: "Correct. It limits the wait."
+
+  - id: ats111-030-q15
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use overlays"
+    source_readings:
+      - sections/section-030/module-02/course-02-overlays-with-kustomize.md
+    prompt: "What should an overlay change?"
+    options:
+      - id: a
+        text: "The whole base, copied."
+        explanation: "Not correct. That removes the shared source."
+      - id: b
+        text: "The Flux controllers."
+        explanation: "Not correct. Overlays do not touch Flux."
+      - id: c
+        text: "The CRDs of the operator."
+        explanation: "Not correct. They are not in the overlay."
+      - id: d
+        text: "Values such as the namespace, a prefix, labels or a small patch."
+        explanation: "Correct. The base keeps the shared content."
+    correct_option: d
+    explanation: "Correct. The base keeps the shared content."
+
+  - id: ats111-030-q16
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Preview a build"
+    source_readings:
+      - sections/section-030/module-02/course-02-overlays-with-kustomize.md
+    prompt: "Which command shows the output of an overlay without a cluster?"
+    options:
+      - id: a
+        text: "`kubectl kustomize <folder>`"
+        explanation: "Correct. It builds and prints the objects."
+      - id: b
+        text: "`flux reconcile <folder>`"
+        explanation: "Not correct. That needs a cluster."
+      - id: c
+        text: "`kubectl get kustomize`"
+        explanation: "Not correct. That is not a resource."
+      - id: d
+        text: "`helm template <folder>`"
+        explanation: "Not correct. That is for Helm charts."
+    correct_option: a
+    explanation: "Correct. It builds and prints the objects."
+
+  - id: ats111-030-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what adding a file changes"
+    source_readings:
+      - sections/section-030/module-02/course-02-overlays-with-kustomize.md
+    prompt: "You add a `kustomization.yaml` to a folder that Flux applies. What changes?"
+    options:
+      - id: a
+        text: "Nothing, because Flux ignores the file."
+        explanation: "Not correct. Flux builds with it."
+      - id: b
+        text: "Flux applies only the files the new file lists."
+        explanation: "Correct. Without the file Flux applies every YAML file."
+      - id: c
+        text: "Flux applies the files twice."
+        explanation: "Not correct. Each is applied once."
+      - id: d
+        text: "Flux stops with an error."
+        explanation: "Not correct. The file is valid."
+    correct_option: b
+    explanation: "Correct. Without the file Flux applies every YAML file."
+
+  - id: ats111-030-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Place a substitution"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-from-the-cluster.md
+    prompt: "Where does `postBuild.substituteFrom` look for the ConfigMap?"
+    options:
+      - id: a
+        text: "In the namespace of the Perses server."
+        explanation: "Not correct. It does not look there."
+      - id: b
+        text: "In every namespace."
+        explanation: "Not correct. It reads one namespace."
+      - id: c
+        text: "In the namespace of the Flux `Kustomization`."
+        explanation: "Correct. The reference has no namespace field."
+      - id: d
+        text: "In the Git repository."
+        explanation: "Not correct. It reads the cluster."
+    correct_option: c
+    explanation: "Correct. The reference has no namespace field."
+
+  - id: ats111-030-q19
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Spot a hidden failure"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-from-the-cluster.md
+    prompt: "A delivery is `Ready` but the dashboard is missing in Perses. What do you read next?"
+    options:
+      - id: a
+        text: "Nothing. `Ready` means it works."
+        explanation: "Not correct. It only means the apply succeeded."
+      - id: b
+        text: "Only the Flux log."
+        explanation: "Not correct. Flux has no error to show."
+      - id: c
+        text: "The node events."
+        explanation: "Not correct. They are unrelated."
+      - id: d
+        text: "The conditions of the Perses object, because Perses may refuse the content."
+        explanation: "Correct. Flux does not check the Perses side."
+    correct_option: d
+    explanation: "Correct. Flux does not check the Perses side."
+
+  - id: ats111-030-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Start at the source"
+    source_readings:
+      - sections/section-030/module-02/course-04-find-out-why-a-sync-is-stuck.md
+    prompt: "Something in Git never arrives. Where does the search start?"
+    options:
+      - id: a
+        text: "At the source: `flux get sources git`, then the Kustomization, then the Perses object."
+        explanation: "Correct. Follow the chain in order."
+      - id: b
+        text: "At the Perses server log."
+        explanation: "Not correct. That is the end of the chain."
+      - id: c
+        text: "At the operator log."
+        explanation: "Not correct. Nothing has reached the operator yet."
+      - id: d
+        text: "By deleting the Kustomization."
+        explanation: "Not correct. That destroys evidence."
+    correct_option: a
+    explanation: "Correct. Follow the chain in order."

@@ -244,3 +244,233 @@ questions:
     correct_option: a
     explanation: "Correct. Deleting the resource would delete the server and its `emptyDir` data."
 
+
+  - id: ats111-010-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose storage that survives a restart"
+    source_readings:
+      - sections/section-010/module-02/course-01-persistent-storage.md
+    prompt: "Which workload kind does the operator create when `spec.storage` is `emptyDir`?"
+    options:
+      - id: a
+        text: "A StatefulSet with one PersistentVolumeClaim."
+        explanation: "Not correct. A StatefulSet is used for storage other than `emptyDir`."
+      - id: b
+        text: "A DaemonSet on every node."
+        explanation: "Not correct. The operator never runs a Perses server as a DaemonSet."
+      - id: c
+        text: "A CronJob that copies the database away."
+        explanation: "Not correct. The operator creates no backup job."
+      - id: d
+        text: "A Deployment, and the database is lost with the pod."
+        explanation: "Correct. With `emptyDir` the data lives only as long as the pod does."
+    correct_option: d
+    explanation: "Correct. With `emptyDir` the data lives only as long as the pod does."
+
+  - id: ats111-010-q12
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose storage that survives a restart"
+    source_readings:
+      - sections/section-010/module-02/course-01-persistent-storage.md
+    prompt: "A `Perses` resource uses a `pvcTemplate`. Which workload does the operator run?"
+    options:
+      - id: a
+        text: "A StatefulSet, whose pod keeps its name and its PersistentVolumeClaim."
+        explanation: "Correct. Storage other than `emptyDir` gives a StatefulSet."
+      - id: b
+        text: "A Deployment, because the Perses server is stateless."
+        explanation: "Not correct. A Deployment is used for `emptyDir`."
+      - id: c
+        text: "A Job that runs once and exits."
+        explanation: "Not correct. A Job does not serve requests."
+      - id: d
+        text: "A DaemonSet, because the volume is local."
+        explanation: "Not correct. No DaemonSet is created."
+    correct_option: a
+    explanation: "Correct. Storage other than `emptyDir` gives a StatefulSet."
+
+  - id: ats111-010-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove that data survives"
+    source_readings:
+      - sections/section-010/module-02/course-01-persistent-storage.md
+    prompt: "Which test proves that the data of a Perses server survives a restart?"
+    options:
+      - id: a
+        text: "Check that the PersistentVolumeClaim exists."
+        explanation: "Not correct. A claim can exist while the server writes elsewhere."
+      - id: b
+        text: "Create a project, delete the pod, and read the project again."
+        explanation: "Correct. The data must come back from the volume, not from memory."
+      - id: c
+        text: "Read `spec.storage` on the `Perses` resource."
+        explanation: "Not correct. That shows what you asked for, not what happens."
+      - id: d
+        text: "Check that the pod has the status `Running`."
+        explanation: "Not correct. A running pod says nothing about its data."
+    correct_option: b
+    explanation: "Correct. The data must come back from the volume, not from memory."
+
+  - id: ats111-010-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find who validates the configuration"
+    source_readings:
+      - sections/section-010/module-02/course-02-server-configuration.md
+    prompt: "You put a wrong value in `spec.config`. Where do you find the reason that the server does not start?"
+    options:
+      - id: a
+        text: "In the log of the operator, because it validates the block."
+        explanation: "Not correct. The operator does not read the content."
+      - id: b
+        text: "In the status of the `Perses` resource only."
+        explanation: "Not correct. The status may not name the value."
+      - id: c
+        text: "In the log of the Perses pod, because the server validates the file."
+        explanation: "Correct. The operator copies the block into a ConfigMap without reading it."
+      - id: d
+        text: "In the Kubernetes API server response at apply time."
+        explanation: "Not correct. The schema accepts any content in this block."
+    correct_option: c
+    explanation: "Correct. The operator copies the block into a ConfigMap without reading it."
+
+  - id: ats111-010-q15
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the running configuration"
+    source_readings:
+      - sections/section-010/module-02/course-02-server-configuration.md
+    prompt: "Which path on the server shows the configuration that the server really runs?"
+    options:
+      - id: a
+        text: "`/api/v1/config`"
+        explanation: "Not correct. That is not the path used in this course."
+      - id: b
+        text: "`/healthz`"
+        explanation: "Not correct. It reports health only."
+      - id: c
+        text: "`/api/v1/projects`"
+        explanation: "Not correct. It lists projects."
+      - id: d
+        text: "`/api/config`"
+        explanation: "Correct. The server reports its own configuration there."
+    correct_option: d
+    explanation: "Correct. The server reports its own configuration there."
+
+  - id: ats111-010-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep secrets out of the configuration"
+    source_readings:
+      - sections/section-010/module-02/course-02-server-configuration.md
+    prompt: "How should a secret value reach the Perses configuration?"
+    options:
+      - id: a
+        text: "Through the file variant of the key, which reads the value from a mounted file."
+        explanation: "Correct. The block `spec.config` is stored in a ConfigMap, which is not secret."
+      - id: b
+        text: "Written as plain text in `spec.config`."
+        explanation: "Not correct. The value would be stored in a ConfigMap."
+      - id: c
+        text: "Written in an annotation of the `Perses` resource."
+        explanation: "Not correct. Annotations are readable by anyone with access."
+      - id: d
+        text: "Put in the name of the `Perses` resource."
+        explanation: "Not correct. Names are not secret."
+    correct_option: a
+    explanation: "Correct. The block `spec.config` is stored in a ConfigMap, which is not secret."
+
+  - id: ats111-010-q17
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Label the pods of a server"
+    source_readings:
+      - sections/section-010/module-02/course-03-pod-settings-and-replicas.md
+    prompt: "What does `spec.metadata` on a `Perses` resource label?"
+    options:
+      - id: a
+        text: "The `Perses` resource itself."
+        explanation: "Not correct. Use the top-level `metadata` for that."
+      - id: b
+        text: "The pods that the operator creates, not the resource itself."
+        explanation: "Correct. The labels of the resource are set in its own `metadata`."
+      - id: c
+        text: "Only the Service."
+        explanation: "Not correct. The block is for the pod template."
+      - id: d
+        text: "Every dashboard that the server receives."
+        explanation: "Not correct. Dashboards have their own labels."
+    correct_option: b
+    explanation: "Correct. The labels of the resource are set in its own `metadata`."
+
+  - id: ats111-010-q18
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain replicas with a file database"
+    source_readings:
+      - sections/section-010/module-02/course-03-pod-settings-and-replicas.md
+    prompt: "What happens when you set two replicas and use the file database?"
+    options:
+      - id: a
+        text: "Both replicas share one database and answer the same."
+        explanation: "Not correct. The file database is not shared."
+      - id: b
+        text: "The operator refuses the resource."
+        explanation: "Not correct. The resource is accepted."
+      - id: c
+        text: "Each replica keeps its own copy of the data, so the copies drift apart."
+        explanation: "Correct. High availability needs a shared database, for example a SQL database."
+      - id: d
+        text: "The second replica is a hot standby that takes over."
+        explanation: "Not correct. Both replicas serve requests."
+    correct_option: c
+    explanation: "Correct. High availability needs a shared database, for example a SQL database."
+
+  - id: ats111-010-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order the client and authentication settings"
+    source_readings:
+      - sections/section-010/module-02/course-04-tls-provisioning-client.md
+    prompt: "When must `spec.client` be set on the `Perses` resource?"
+    options:
+      - id: a
+        text: "After authentication is turned on, once the first login fails."
+        explanation: "Not correct. Delivery has already stopped by then."
+      - id: b
+        text: "Only when read-only mode is on."
+        explanation: "Not correct. Read-only mode refuses writes whatever the client is."
+      - id: c
+        text: "Never, because the operator uses its ServiceAccount."
+        explanation: "Not correct. The server does not know the ServiceAccount."
+      - id: d
+        text: "Before authentication is turned on, so the operator can still log in."
+        explanation: "Correct. Without credentials the operator cannot write to the server."
+    correct_option: d
+    explanation: "Correct. Without credentials the operator cannot write to the server."
+
+  - id: ats111-010-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Enable TLS correctly"
+    source_readings:
+      - sections/section-010/module-02/course-04-tls-provisioning-client.md
+    prompt: "What must a TLS certificate for the Perses server be valid for?"
+    options:
+      - id: a
+        text: "The name of the Service that clients use to reach the server."
+        explanation: "Correct. A client checks the name it connected to against the certificate."
+      - id: b
+        text: "The name of the node."
+        explanation: "Not correct. Clients do not connect to the node name."
+      - id: c
+        text: "The name of the operator."
+        explanation: "Not correct. The operator is not the server."
+      - id: d
+        text: "Any name, because Perses ignores it."
+        explanation: "Not correct. Clients check the name."
+    correct_option: a
+    explanation: "Correct. A client checks the name it connected to against the certificate."

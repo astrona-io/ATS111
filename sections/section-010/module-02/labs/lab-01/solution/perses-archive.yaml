@@ -1,0 +1,27 @@
+apiVersion: perses.dev/v1alpha2
+kind: Perses
+metadata:
+  name: archive
+  namespace: archive
+  labels:
+    app.kubernetes.io/instance: archive
+spec:
+  image: docker.io/persesdev/perses:v0.54.0
+  containerPort: 8080
+  config:
+    database:
+      file:
+        folder: /perses
+        extension: yaml
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  resources:
+    requests:
+      memory: 128Mi
+    limits:
+      memory: 512Mi

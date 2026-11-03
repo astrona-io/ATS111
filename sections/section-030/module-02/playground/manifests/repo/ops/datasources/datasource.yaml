@@ -1,0 +1,20 @@
+apiVersion: perses.dev/v1alpha2
+kind: PersesDatasource
+metadata:
+  name: ops-prometheus
+  namespace: payments
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/instance: perses
+  config:
+    display:
+      name: Ops Prometheus
+    default: false
+    plugin:
+      kind: PrometheusDatasource
+      spec:
+        proxy:
+          kind: HTTPProxy
+          spec:
+            url: ${PROMETHEUS_URL}

@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: catalog
+namePrefix: catalog-
+resources:
+  - ../../base/service-health
+patches:
+  - target:
+      kind: PersesDashboard
+      name: service-health
+    patch: |-
+      - op: replace
+        path: /spec/config/display/name
+        value: Catalog Service Health

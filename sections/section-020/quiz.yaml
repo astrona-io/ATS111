@@ -244,3 +244,233 @@ questions:
     correct_option: a
     explanation: "Correct. The operator reserves that path for its own provisioning Secrets."
 
+
+  - id: ats111-020-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what a selector reads"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "Which labels does `instanceSelector` match?"
+    options:
+      - id: a
+        text: "The labels of the dashboard itself."
+        explanation: "Not correct. That would match nothing useful."
+      - id: b
+        text: "The labels of the namespace of the dashboard."
+        explanation: "Not correct. Namespace labels are not used."
+      - id: c
+        text: "The labels of the pods of the server."
+        explanation: "Not correct. Pod labels are set by `spec.metadata`."
+      - id: d
+        text: "The labels in the `metadata.labels` of the `Perses` resources."
+        explanation: "Correct. The selector chooses among servers."
+    correct_option: d
+    explanation: "Correct. The selector chooses among servers."
+
+  - id: ats111-020-q12
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use matchLabels"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "A selector lists two pairs under `matchLabels`. What must be true for a server to match?"
+    options:
+      - id: a
+        text: "Both pairs must be present on the `Perses` resource."
+        explanation: "Correct. `matchLabels` is an AND of all pairs."
+      - id: b
+        text: "Either pair is enough."
+        explanation: "Not correct. That would be an OR."
+      - id: c
+        text: "Only the first pair is read."
+        explanation: "Not correct. Every pair is read."
+      - id: d
+        text: "The pairs must be on the namespace."
+        explanation: "Not correct. They must be on the `Perses` resource."
+    correct_option: a
+    explanation: "Correct. `matchLabels` is an AND of all pairs."
+
+  - id: ats111-020-q13
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "A `PersesDashboard` has no `instanceSelector`. Where does it go?"
+    options:
+      - id: a
+        text: "To no server."
+        explanation: "Not correct. It goes to all of them."
+      - id: b
+        text: "To every available Perses server the operator manages."
+        explanation: "Correct. No selector means no restriction."
+      - id: c
+        text: "Only to the server in its own namespace."
+        explanation: "Not correct. Namespaces do not decide it."
+      - id: d
+        text: "To the server with the oldest creation time."
+        explanation: "Not correct. Age is not used."
+    correct_option: b
+    explanation: "Correct. No selector means no restriction."
+
+  - id: ats111-020-q14
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict what a narrowed selector does"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "You narrow a selector so it no longer matches the server `old`. What happens to the dashboard on `old`?"
+    options:
+      - id: a
+        text: "It is deleted at once."
+        explanation: "Not correct. No removal is done."
+      - id: b
+        text: "It is moved to the new server together with its data."
+        explanation: "Not correct. It is sent again, not moved."
+      - id: c
+        text: "It stays there, so you check the old server after the change."
+        explanation: "Correct. The operator does not remove the copy from a server that no longer matches."
+      - id: d
+        text: "The dashboard becomes `Degraded`."
+        explanation: "Not correct. Nothing marks it as degraded."
+    correct_option: c
+    explanation: "Correct. The operator does not remove the copy from a server that no longer matches."
+
+  - id: ats111-020-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the datasource form that can restrict"
+    source_readings:
+      - sections/section-020/module-02/course-02-datasource-proxy-settings.md
+    prompt: "Which form of a Prometheus datasource can restrict the queries a dashboard sends?"
+    options:
+      - id: a
+        text: "The direct URL form."
+        explanation: "Not correct. The browser calls Prometheus itself, so the server cannot limit it."
+      - id: b
+        text: "Both forms, equally."
+        explanation: "Not correct. Only the proxy can limit."
+      - id: c
+        text: "Neither form. Use a NetworkPolicy only."
+        explanation: "Not correct. The proxy has its own list."
+      - id: d
+        text: "The proxy form, with `allowedEndpoints`."
+        explanation: "Correct. Only the proxy forwards queries from the server."
+    correct_option: d
+    explanation: "Correct. Only the proxy forwards queries from the server."
+
+  - id: ats111-020-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove an endpoint limit"
+    source_readings:
+      - sections/section-020/module-02/course-02-datasource-proxy-settings.md
+    prompt: "How do you prove that `allowedEndpoints` works?"
+    options:
+      - id: a
+        text: "A needed endpoint works and an endpoint outside the list is refused."
+        explanation: "Correct. A limit is proved by both a yes and a no."
+      - id: b
+        text: "The `PersesDatasource` is `Available`."
+        explanation: "Not correct. That says nothing about the list."
+      - id: c
+        text: "The dashboard renders one panel."
+        explanation: "Not correct. The panel may use an allowed endpoint."
+      - id: d
+        text: "The YAML has the field."
+        explanation: "Not correct. A field in YAML is not a result."
+    correct_option: a
+    explanation: "Correct. A limit is proved by both a yes and a no."
+
+  - id: ats111-020-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find who validates a dashboard"
+    source_readings:
+      - sections/section-020/module-02/course-03-variables-and-layouts.md
+    prompt: "Who validates the content of `spec.config` on a `PersesDashboard`?"
+    options:
+      - id: a
+        text: "The Kubernetes API server, at apply time."
+        explanation: "Not correct. It checks the schema only."
+      - id: b
+        text: "The Perses server, and it reports `ValidationFailed` in the conditions."
+        explanation: "Correct. The operator copies the block as it is."
+      - id: c
+        text: "The operator, before it sends the object."
+        explanation: "Not correct. The operator does not read the content."
+      - id: d
+        text: "Flux, before it applies the object."
+        explanation: "Not correct. Flux does not know Perses."
+    correct_option: b
+    explanation: "Correct. The operator copies the block as it is."
+
+  - id: ats111-020-q18
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read a layout"
+    source_readings:
+      - sections/section-020/module-02/course-03-variables-and-layouts.md
+    prompt: "How does a layout item point to a panel?"
+    options:
+      - id: a
+        text: "With the panel name in a `name` field."
+        explanation: "Not correct. The reference form is used."
+      - id: b
+        text: "With the position in the list of panels."
+        explanation: "Not correct. Panels are a map, not a list."
+      - id: c
+        text: "With a JSON reference such as `$ref: \"#/spec/panels/totals\"`."
+        explanation: "Correct. The panel is defined once and referred to."
+      - id: d
+        text: "With a Kubernetes `ownerReference`."
+        explanation: "Not correct. Panels are not Kubernetes objects."
+    correct_option: c
+    explanation: "Correct. The panel is defined once and referred to."
+
+  - id: ats111-020-q19
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a dry run"
+    source_readings:
+      - sections/section-020/module-02/course-04-preview-and-change-safely.md
+    prompt: "What does a server-side dry run of a `PersesDashboard` check?"
+    options:
+      - id: a
+        text: "Everything the Perses server checks."
+        explanation: "Not correct. The dry run stops at the API server."
+      - id: b
+        text: "Only that the namespace exists."
+        explanation: "Not correct. It checks much more than that."
+      - id: c
+        text: "That Prometheus answers the queries."
+        explanation: "Not correct. No query is run."
+      - id: d
+        text: "The schema of the object, not the panels inside `spec.config`."
+        explanation: "Correct. The panels are checked later by the Perses server."
+    correct_option: d
+    explanation: "Correct. The panels are checked later by the Perses server."
+
+  - id: ats111-020-q20
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Handle a stuck deletion"
+    source_readings:
+      - sections/section-020/module-02/course-04-preview-and-change-safely.md
+    prompt: "An object stays in `Terminating`. What do you do first?"
+    options:
+      - id: a
+        text: "Read `deletionTimestamp` and `finalizers` to see what holds it, before you remove anything."
+        explanation: "Correct. A finalizer exists so a controller can clean up first."
+      - id: b
+        text: "Remove the finalizer at once."
+        explanation: "Not correct. You may leave a copy on the server."
+      - id: c
+        text: "Delete the CRD."
+        explanation: "Not correct. That removes every object of the kind."
+      - id: d
+        text: "Restart the Kubernetes API server."
+        explanation: "Not correct. The cause is in the object."
+    correct_option: a
+    explanation: "Correct. A finalizer exists so a controller can clean up first."

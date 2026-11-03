@@ -244,3 +244,233 @@ questions:
     correct_option: a
     explanation: "Correct. Without it the operator cannot write to the server."
 
+
+  - id: ats111-040-q11
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write a quota key"
+    source_readings:
+      - sections/section-040/module-02/course-01-cap-what-a-team-can-create.md
+    prompt: "Which key caps the number of `PersesDashboard` objects in a namespace?"
+    options:
+      - id: a
+        text: "`persesdashboards`"
+        explanation: "Not correct. A group is needed."
+      - id: b
+        text: "`count/dashboards`"
+        explanation: "Not correct. The resource and group are needed."
+      - id: c
+        text: "`limits.persesdashboards`"
+        explanation: "Not correct. That form is for compute resources."
+      - id: d
+        text: "`count/persesdashboards.perses.dev`"
+        explanation: "Correct. The form is `count/<resource>.<group>`."
+    correct_option: d
+    explanation: "Correct. The form is `count/<resource>.<group>`."
+
+  - id: ats111-040-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict a quota"
+    source_readings:
+      - sections/section-040/module-02/course-01-cap-what-a-team-can-create.md
+    prompt: "A namespace is over its quota of dashboards. What does the quota do?"
+    options:
+      - id: a
+        text: "It refuses new objects and removes none."
+        explanation: "Correct. Quotas only stop creation."
+      - id: b
+        text: "It deletes the oldest dashboard."
+        explanation: "Not correct. Nothing is deleted."
+      - id: c
+        text: "It stops the Perses server."
+        explanation: "Not correct. The server is untouched."
+      - id: d
+        text: "It warns and accepts the object."
+        explanation: "Not correct. The object is refused."
+    correct_option: a
+    explanation: "Correct. Quotas only stop creation."
+
+  - id: ats111-040-q13
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a quota failure"
+    source_readings:
+      - sections/section-040/module-02/course-01-cap-what-a-team-can-create.md
+    prompt: "How does a refused dashboard show up in a Flux delivery?"
+    options:
+      - id: a
+        text: "As a Perses `ValidationFailed` condition."
+        explanation: "Not correct. Perses never saw it."
+      - id: b
+        text: "As an `exceeded quota` message in the Kustomization."
+        explanation: "Correct. The API server's answer is passed on."
+      - id: c
+        text: "As a missing GitRepository."
+        explanation: "Not correct. The source is fine."
+      - id: d
+        text: "It is silent."
+        explanation: "Not correct. The message is shown."
+    correct_option: b
+    explanation: "Correct. The API server's answer is passed on."
+
+  - id: ats111-040-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name who needs access"
+    source_readings:
+      - sections/section-040/module-02/course-02-restrict-who-can-call-the-server.md
+    prompt: "A NetworkPolicy limits calls to the Perses server. Which namespace must be allowed?"
+    options:
+      - id: a
+        text: "Only the team namespaces."
+        explanation: "Not correct. The operator would be blocked."
+      - id: b
+        text: "`kube-system` only."
+        explanation: "Not correct. It is unrelated."
+      - id: c
+        text: "The namespace of the operator, or delivery stops."
+        explanation: "Correct. The operator calls the server API."
+      - id: d
+        text: "No namespace. Policies never block the operator."
+        explanation: "Not correct. They do."
+    correct_option: c
+    explanation: "Correct. The operator calls the server API."
+
+  - id: ats111-040-q15
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Test a policy"
+    source_readings:
+      - sections/section-040/module-02/course-02-restrict-who-can-call-the-server.md
+    prompt: "Why test a NetworkPolicy with a pod that should be refused?"
+    options:
+      - id: a
+        text: "Policies always work on every cluster."
+        explanation: "Not correct. Some plugins ignore them."
+      - id: b
+        text: "It is faster than reading the policy."
+        explanation: "Not correct. The reason is enforcement."
+      - id: c
+        text: "Because the operator tests it itself."
+        explanation: "Not correct. It does not."
+      - id: d
+        text: "A policy has an effect only when the network plugin enforces it."
+        explanation: "Correct. A policy object alone proves nothing."
+    correct_option: d
+    explanation: "Correct. A policy object alone proves nothing."
+
+  - id: ats111-040-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Match a namespace"
+    source_readings:
+      - sections/section-040/module-02/course-02-restrict-who-can-call-the-server.md
+    prompt: "Which label does a NetworkPolicy use to select a namespace by name?"
+    options:
+      - id: a
+        text: "`kubernetes.io/metadata.name`"
+        explanation: "Correct. Kubernetes sets it on every namespace."
+      - id: b
+        text: "`name`"
+        explanation: "Not correct. It is not set by default."
+      - id: c
+        text: "`app.kubernetes.io/name`"
+        explanation: "Not correct. That labels workloads."
+      - id: d
+        text: "`perses.dev/project`"
+        explanation: "Not correct. That is not a namespace label."
+    correct_option: a
+    explanation: "Correct. Kubernetes sets it on every namespace."
+
+  - id: ats111-040-q17
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Understand read-only mode"
+    source_readings:
+      - sections/section-040/module-02/course-03-read-only-mode-and-server-authentication.md
+    prompt: "What does a read-only Perses server do with writes from the operator?"
+    options:
+      - id: a
+        text: "It accepts them because the operator is trusted."
+        explanation: "Not correct. Everyone is refused."
+      - id: b
+        text: "It refuses them, so a managed server cannot be read-only."
+        explanation: "Correct. Read-only refuses every write."
+      - id: c
+        text: "It queues them."
+        explanation: "Not correct. Nothing is queued."
+      - id: d
+        text: "It accepts only dashboards."
+        explanation: "Not correct. All writes are refused."
+    correct_option: b
+    explanation: "Correct. Read-only refuses every write."
+
+  - id: ats111-040-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Give the operator credentials"
+    source_readings:
+      - sections/section-040/module-02/course-03-read-only-mode-and-server-authentication.md
+    prompt: "Authentication is on. What does the operator need?"
+    options:
+      - id: a
+        text: "A cluster-admin binding."
+        explanation: "Not correct. The server does not use Kubernetes roles."
+      - id: b
+        text: "Nothing. The operator is exempt."
+        explanation: "Not correct. It must log in."
+      - id: c
+        text: "Credentials in `spec.client` on the `Perses` resource."
+        explanation: "Correct. Fields are found with `kubectl explain`."
+      - id: d
+        text: "A second Perses server."
+        explanation: "Not correct. That does not help."
+    correct_option: c
+    explanation: "Correct. Fields are found with `kubectl explain`."
+
+  - id: ats111-040-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Inspect the operator"
+    source_readings:
+      - sections/section-040/module-02/course-04-least-privilege-for-the-operator.md
+    prompt: "Which command checks what a ServiceAccount may do?"
+    options:
+      - id: a
+        text: "`kubectl get rolebinding`"
+        explanation: "Not correct. It lists bindings only."
+      - id: b
+        text: "`kubectl describe perses`"
+        explanation: "Not correct. It does not show rights."
+      - id: c
+        text: "`kubectl top sa`"
+        explanation: "Not correct. No such command."
+      - id: d
+        text: "`kubectl auth can-i <verb> <resource> --as system:serviceaccount:<ns>:<name>`"
+        explanation: "Correct. It asks the API server with that identity."
+    correct_option: d
+    explanation: "Correct. It asks the API server with that identity."
+
+  - id: ats111-040-q20
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Review the operator ClusterRole"
+    source_readings:
+      - sections/section-040/module-02/course-04-least-privilege-for-the-operator.md
+    prompt: "Why print the rules of a role instead of reading its name?"
+    options:
+      - id: a
+        text: "The name tells little. The rules show the verbs and resources it grants."
+        explanation: "Correct. Names can be misleading."
+      - id: b
+        text: "Names are always exact."
+        explanation: "Not correct. They are free text."
+      - id: c
+        text: "Rules are encrypted."
+        explanation: "Not correct. They are plain."
+      - id: d
+        text: "Roles have no rules."
+        explanation: "Not correct. Rules are their content."
+    correct_option: a
+    explanation: "Correct. Names can be misleading."

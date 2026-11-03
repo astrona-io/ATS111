@@ -1,4 +1,4 @@
-# Final domain knowledge check across all four sections.
+# Final domain knowledge check across all five sections.
 schema_version: 1
 kind: question_bank
 id: ats111-final
@@ -12,7 +12,7 @@ scope:
   title: "Kubernetes-Native Operations & The Perses Operator"
 placement:
   position: after
-  reading: sections/section-040/capstone/labs/lab-01/question.md
+  reading: sections/section-050/capstone/labs/lab-01/question.md
 questions:
   - id: ats111-final-q01
     type: single_choice
@@ -290,3 +290,348 @@ questions:
     correct_option: c
     explanation: "Correct. It is set on kustomize-controller and helm-controller."
 
+
+  - id: ats111-final-q13
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose storage that survives a restart"
+    source_readings:
+      - sections/section-010/module-02/course-01-persistent-storage.md
+    prompt: "Which workload kind does the operator create when `spec.storage` is `emptyDir`?"
+    options:
+      - id: a
+        text: "A StatefulSet with one PersistentVolumeClaim."
+        explanation: "Not correct. A StatefulSet is used for storage other than `emptyDir`."
+      - id: b
+        text: "A Deployment, and the database is lost with the pod."
+        explanation: "Correct. With `emptyDir` the data lives only as long as the pod does."
+      - id: c
+        text: "A DaemonSet on every node."
+        explanation: "Not correct. The operator never runs a Perses server as a DaemonSet."
+      - id: d
+        text: "A CronJob that copies the database away."
+        explanation: "Not correct. The operator creates no backup job."
+    correct_option: b
+    explanation: "Correct. With `emptyDir` the data lives only as long as the pod does."
+
+  - id: ats111-final-q14
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find who validates the configuration"
+    source_readings:
+      - sections/section-010/module-02/course-02-server-configuration.md
+    prompt: "You put a wrong value in `spec.config`. Where do you find the reason that the server does not start?"
+    options:
+      - id: a
+        text: "In the log of the operator, because it validates the block."
+        explanation: "Not correct. The operator does not read the content."
+      - id: b
+        text: "In the status of the `Perses` resource only."
+        explanation: "Not correct. The status may not name the value."
+      - id: c
+        text: "In the log of the Perses pod, because the server validates the file."
+        explanation: "Correct. The operator copies the block into a ConfigMap without reading it."
+      - id: d
+        text: "In the Kubernetes API server response at apply time."
+        explanation: "Not correct. The schema accepts any content in this block."
+    correct_option: c
+    explanation: "Correct. The operator copies the block into a ConfigMap without reading it."
+
+  - id: ats111-final-q15
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order the client and authentication settings"
+    source_readings:
+      - sections/section-010/module-02/course-04-tls-provisioning-client.md
+    prompt: "When must `spec.client` be set on the `Perses` resource?"
+    options:
+      - id: a
+        text: "After authentication is turned on, once the first login fails."
+        explanation: "Not correct. Delivery has already stopped by then."
+      - id: b
+        text: "Only when read-only mode is on."
+        explanation: "Not correct. Read-only mode refuses writes whatever the client is."
+      - id: c
+        text: "Never, because the operator uses its ServiceAccount."
+        explanation: "Not correct. The server does not know the ServiceAccount."
+      - id: d
+        text: "Before authentication is turned on, so the operator can still log in."
+        explanation: "Correct. Without credentials the operator cannot write to the server."
+    correct_option: d
+    explanation: "Correct. Without credentials the operator cannot write to the server."
+
+  - id: ats111-final-q16
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what a selector reads"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "Which labels does `instanceSelector` match?"
+    options:
+      - id: a
+        text: "The labels in the `metadata.labels` of the `Perses` resources."
+        explanation: "Correct. The selector chooses among servers."
+      - id: b
+        text: "The labels of the dashboard itself."
+        explanation: "Not correct. That would match nothing useful."
+      - id: c
+        text: "The labels of the namespace of the dashboard."
+        explanation: "Not correct. Namespace labels are not used."
+      - id: d
+        text: "The labels of the pods of the server."
+        explanation: "Not correct. Pod labels are set by `spec.metadata`."
+    correct_option: a
+    explanation: "Correct. The selector chooses among servers."
+
+  - id: ats111-final-q17
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict what a narrowed selector does"
+    source_readings:
+      - sections/section-020/module-02/course-01-several-servers-and-selectors.md
+    prompt: "You narrow a selector so it no longer matches the server `old`. What happens to the dashboard on `old`?"
+    options:
+      - id: a
+        text: "It is deleted at once."
+        explanation: "Not correct. No removal is done."
+      - id: b
+        text: "It stays there, so you check the old server after the change."
+        explanation: "Correct. The operator does not remove the copy from a server that no longer matches."
+      - id: c
+        text: "It is moved to the new server together with its data."
+        explanation: "Not correct. It is sent again, not moved."
+      - id: d
+        text: "The dashboard becomes `Degraded`."
+        explanation: "Not correct. Nothing marks it as degraded."
+    correct_option: b
+    explanation: "Correct. The operator does not remove the copy from a server that no longer matches."
+
+  - id: ats111-final-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a dry run"
+    source_readings:
+      - sections/section-020/module-02/course-04-preview-and-change-safely.md
+    prompt: "What does a server-side dry run of a `PersesDashboard` check?"
+    options:
+      - id: a
+        text: "Everything the Perses server checks."
+        explanation: "Not correct. The dry run stops at the API server."
+      - id: b
+        text: "Only that the namespace exists."
+        explanation: "Not correct. It checks much more than that."
+      - id: c
+        text: "The schema of the object, not the panels inside `spec.config`."
+        explanation: "Correct. The panels are checked later by the Perses server."
+      - id: d
+        text: "That Prometheus answers the queries."
+        explanation: "Not correct. No query is run."
+    correct_option: c
+    explanation: "Correct. The panels are checked later by the Perses server."
+
+  - id: ats111-final-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order deliveries"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "What does `dependsOn` on a Flux `Kustomization` do?"
+    options:
+      - id: a
+        text: "It applies the listed Kustomizations first by itself."
+        explanation: "Not correct. It only waits."
+      - id: b
+        text: "It copies their files into its own path."
+        explanation: "Not correct. Each keeps its own path."
+      - id: c
+        text: "It fixes failing health checks."
+        explanation: "Not correct. It does not repair anything."
+      - id: d
+        text: "It waits until the listed Kustomizations are `Ready` before it applies."
+        explanation: "Correct. Without it there is no order."
+    correct_option: d
+    explanation: "Correct. Without it there is no order."
+
+  - id: ats111-final-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Bound a health check"
+    source_readings:
+      - sections/section-030/module-02/course-01-order-and-health.md
+    prompt: "Which field bounds how long Flux waits for the health checks?"
+    options:
+      - id: a
+        text: "`timeout`"
+        explanation: "Correct. It limits the wait."
+      - id: b
+        text: "`interval`"
+        explanation: "Not correct. It sets how often Flux reconciles."
+      - id: c
+        text: "`retryInterval`"
+        explanation: "Not correct. It sets the wait after a failure."
+      - id: d
+        text: "`prune`"
+        explanation: "Not correct. It controls removal of objects."
+    correct_option: a
+    explanation: "Correct. It limits the wait."
+
+  - id: ats111-final-q21
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Spot a hidden failure"
+    source_readings:
+      - sections/section-030/module-02/course-03-variables-from-the-cluster.md
+    prompt: "A delivery is `Ready` but the dashboard is missing in Perses. What do you read next?"
+    options:
+      - id: a
+        text: "Nothing. `Ready` means it works."
+        explanation: "Not correct. It only means the apply succeeded."
+      - id: b
+        text: "The conditions of the Perses object, because Perses may refuse the content."
+        explanation: "Correct. Flux does not check the Perses side."
+      - id: c
+        text: "Only the Flux log."
+        explanation: "Not correct. Flux has no error to show."
+      - id: d
+        text: "The node events."
+        explanation: "Not correct. They are unrelated."
+    correct_option: b
+    explanation: "Correct. Flux does not check the Perses side."
+
+  - id: ats111-final-q22
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write a quota key"
+    source_readings:
+      - sections/section-040/module-02/course-01-cap-what-a-team-can-create.md
+    prompt: "Which key caps the number of `PersesDashboard` objects in a namespace?"
+    options:
+      - id: a
+        text: "`persesdashboards`"
+        explanation: "Not correct. A group is needed."
+      - id: b
+        text: "`count/dashboards`"
+        explanation: "Not correct. The resource and group are needed."
+      - id: c
+        text: "`count/persesdashboards.perses.dev`"
+        explanation: "Correct. The form is `count/<resource>.<group>`."
+      - id: d
+        text: "`limits.persesdashboards`"
+        explanation: "Not correct. That form is for compute resources."
+    correct_option: c
+    explanation: "Correct. The form is `count/<resource>.<group>`."
+
+  - id: ats111-final-q23
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name who needs access"
+    source_readings:
+      - sections/section-040/module-02/course-02-restrict-who-can-call-the-server.md
+    prompt: "A NetworkPolicy limits calls to the Perses server. Which namespace must be allowed?"
+    options:
+      - id: a
+        text: "Only the team namespaces."
+        explanation: "Not correct. The operator would be blocked."
+      - id: b
+        text: "`kube-system` only."
+        explanation: "Not correct. It is unrelated."
+      - id: c
+        text: "No namespace. Policies never block the operator."
+        explanation: "Not correct. They do."
+      - id: d
+        text: "The namespace of the operator, or delivery stops."
+        explanation: "Correct. The operator calls the server API."
+    correct_option: d
+    explanation: "Correct. The operator calls the server API."
+
+  - id: ats111-final-q24
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Inspect the operator"
+    source_readings:
+      - sections/section-040/module-02/course-04-least-privilege-for-the-operator.md
+    prompt: "Which command checks what a ServiceAccount may do?"
+    options:
+      - id: a
+        text: "`kubectl auth can-i <verb> <resource> --as system:serviceaccount:<ns>:<name>`"
+        explanation: "Correct. It asks the API server with that identity."
+      - id: b
+        text: "`kubectl get rolebinding`"
+        explanation: "Not correct. It lists bindings only."
+      - id: c
+        text: "`kubectl describe perses`"
+        explanation: "Not correct. It does not show rights."
+      - id: d
+        text: "`kubectl top sa`"
+        explanation: "Not correct. No such command."
+    correct_option: a
+    explanation: "Correct. It asks the API server with that identity."
+
+  - id: ats111-final-q25
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read state in order"
+    source_readings:
+      - sections/section-050/module-01/course-01-see-what-the-platform-is-doing.md
+    prompt: "What do you read first when a Perses object does not work?"
+    options:
+      - id: a
+        text: "The node logs."
+        explanation: "Not correct. They are too far from the cause."
+      - id: b
+        text: "Its status conditions."
+        explanation: "Correct. They are the operator's own summary."
+      - id: c
+        text: "The operator's source code."
+        explanation: "Not correct. Start with the object."
+      - id: d
+        text: "The Git history."
+        explanation: "Not correct. Read the cluster state first."
+    correct_option: b
+    explanation: "Correct. They are the operator's own summary."
+
+  - id: ats111-final-q26
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Restore in order"
+    source_readings:
+      - sections/section-050/module-01/course-02-back-up-and-restore-perses-data.md
+    prompt: "In which order do you restore a project and its dashboards through the API?"
+    options:
+      - id: a
+        text: "The dashboards first."
+        explanation: "Not correct. The server refuses them."
+      - id: b
+        text: "Both at once as one list."
+        explanation: "Not correct. The API takes one object at a time."
+      - id: c
+        text: "The project first, then each dashboard."
+        explanation: "Correct. A dashboard needs its project."
+      - id: d
+        text: "The order does not matter."
+        explanation: "Not correct. It does."
+    correct_option: c
+    explanation: "Correct. A dashboard needs its project."
+
+  - id: ats111-final-q27
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Order an upgrade"
+    source_readings:
+      - sections/section-050/module-01/course-03-change-and-upgrade-safely.md
+    prompt: "What is the order of an operator upgrade?"
+    options:
+      - id: a
+        text: "The operator first, then the definitions."
+        explanation: "Not correct. New code may need new definitions."
+      - id: b
+        text: "All servers at once."
+        explanation: "Not correct. There is no test."
+      - id: c
+        text: "Delete the CRDs, then install."
+        explanation: "Not correct. Deleting removes every object."
+      - id: d
+        text: "Back up, upgrade the definitions, then the operator, then one non-production server, then the rest."
+        explanation: "Correct. Each step limits the risk of the next."
+    correct_option: d
+    explanation: "Correct. Each step limits the risk of the next."
