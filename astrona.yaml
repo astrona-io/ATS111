@@ -13,7 +13,7 @@
 training:
   id: ATS111
   title: "Perses: Kubernetes-Native Operations & The Perses Operator"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Kubernetes-Native Operations & The Perses
     Operator domain of the Perses training path: installing the Perses
