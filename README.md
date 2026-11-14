@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://astrona.io/courses/perses">
+    <img src="https://astrona.io/courses/perses/domains/ATS111.svg" alt="ATS111: Kubernetes-Native Operations & The Perses Operator, part of the Perses course on Astrona" width="100%">
+  </a>
+</p>
+
 # ATS111 — Kubernetes-Native Operations & The Perses Operator (Perses)
 
 Course material for the **Kubernetes-Native Operations & The Perses Operator**
